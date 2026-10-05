@@ -20,7 +20,7 @@ flowchart LR
 
     gemini["Gemini API<br/>(gratisnivå, GEMINI_API_KEY)"]
 
-    subgraph enhet["Sonens iPad/dator"]
+    subgraph enhet["Sonens mobil/dator"]
         app["Webbläsare / hemskärms-app"]
         ls[("localStorage<br/>resultat + svåra ord")]
         tts["Inbyggd talsyntes<br/>(en-GB)"]
@@ -145,7 +145,7 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 5. **Lägg nyckeln i repot:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**. Namn: `GEMINI_API_KEY`, värde: nyckeln.
 6. **Ge workflowen skrivrätt** (så att den kan committa meningarna): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions** → *Save*.
 7. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter. Därefter ligger `*.sentences.json` i `glosor/`, och adressen är `https://<user>.github.io/glosor/`.
-8. **Lägg appen på hemskärmen** på sonens iPad: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app.
+8. **Lägg appen på hemskärmen** på sonens iPhone: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app.
 
 ## Lägga till en ny glosvecka
 
