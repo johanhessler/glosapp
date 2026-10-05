@@ -139,7 +139,8 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 - **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden väljer Gemini ett nytt.
 - **Få nya varianter av alla meningar:** *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar om, även de som redan har rätt tema.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
-- Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions, och listan saknar meningar tills nästa körning.
+- Gratisnivån svarar ofta "hög belastning" (503) eller "för många anrop" (429). Skriptet skickar högst 10 ord per anrop och väntar då 15 s, 30 s, 60 s och sedan 120 s åt gången, upp till ungefär 10 minuter per anrop. Det som lyckas sparas. Ord som fortfarande saknar mening tas med vid nästa körning, senast vid den dagliga körningen.
+- Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions.
 
 ## Automatisk hämtning från glosor.eu
 

@@ -28,6 +28,9 @@ root_dir = Path(__file__).resolve().parent.parent
 list_dir = root_dir / "glosor"
 config_file = root_dir / "sentences_config.json"
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+retry_attempts = 8   # 7 omförsök: 15 + 30 + 60 + 4 × 120 s ≈ 10 min
+batch_size = 10      # ord per anrop – mindre anrop klarar sig bättre när Gemini är belastat
+batch_pause = 4      # s mellan anrop, snällt mot gratisnivåns gräns för anrop per minut
 
 default_config = {
     "learner": "svensk elev i mellanstadiet, nybörjare i engelska (ungefär CEFR A1–A2)",
@@ -93,26 +96,43 @@ def call_gemini(prompt: str, model: str, api_key: str) -> dict:
         headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
         method="POST",
     )
-    delay = 10
-    for attempt in range(5):
+    # Gratisnivån svarar ofta 503 (hög belastning) eller 429 (för många anrop). Det gör inget
+    # om det tar några minuter, så vi väntar 15, 30, 60 och sedan 120 s åt gången (~10 min totalt).
+    for attempt in range(1, retry_attempts + 1):
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with urllib.request.urlopen(req, timeout=180) as resp:
                 data = json.load(resp)
             break
         except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")[:500]
-            if e.code in (429, 500, 502, 503, 504) and attempt < 4:
-                print(f"  Gemini svarade {e.code}, försöker igen om {delay} s …")
-                time.sleep(delay)
-                delay *= 2
-                continue
-            raise RuntimeError(f"Gemini-fel {e.code}: {detail}") from None
+            detail = e.read().decode("utf-8", "replace")
+            if e.code not in (429, 500, 502, 503, 504) or attempt == retry_attempts:
+                raise RuntimeError(f"Gemini-fel {e.code}: {detail[:500]}") from None
+            delay = max(retry_delay(attempt), suggested_delay(e.headers.get("Retry-After"), detail))
+            print(f"  Gemini svarade {e.code}, försöker igen om {delay} s ({attempt}/{retry_attempts - 1}) …")
+        except (urllib.error.URLError, TimeoutError) as e:
+            if attempt == retry_attempts:
+                raise RuntimeError(f"Kunde inte nå Gemini: {e}") from None
+            delay = retry_delay(attempt)
+            print(f"  Kunde inte nå Gemini ({e}), försöker igen om {delay} s …")
+        time.sleep(delay)
     text = "".join(
         p.get("text", "")
         for c in data.get("candidates", [])[:1]
         for p in c.get("content", {}).get("parts", [])
     )
     return parse_json(text)
+
+
+def retry_delay(attempt: int) -> int:
+    return min(15 * 2 ** (attempt - 1), 120)
+
+
+def suggested_delay(retry_after: str | None, detail: str) -> int:
+    """Väntetid som Google själv föreslår (Retry-After eller RetryInfo.retryDelay), annars 0."""
+    if retry_after and retry_after.strip().isdigit():
+        return min(int(retry_after), 300)
+    m = re.search(r'"retryDelay"\s*:\s*"(\d+)(?:\.\d+)?s"', detail)
+    return min(int(m.group(1)) + 1, 300) if m else 0
 
 
 def parse_json(text: str) -> dict:
@@ -143,36 +163,52 @@ def valid_item(item: dict, max_words: int) -> bool:
 
 
 def generate(words: list[dict], theme: str, cfg: dict, api_key: str,
-             title: str = "", choose_theme: bool = False) -> tuple[dict[int, dict], str]:
-    """Returnerar ({index i words: item}, tema). Försöker en gång till med de ord som blev fel.
+             title: str = "", choose_theme: bool = False) -> tuple[dict[int, dict], str, int]:
+    """Returnerar ({index i words: item}, tema, antal ord där Gemini inte gick att nå).
 
-    Med choose_theme väljer Gemini temat i första anropet; omförsöket använder samma tema.
+    Orden skickas i omgångar om batch_size. Ord vars mening inte klarar kontrollen skickas
+    en gång till. Går ett anrop inte igenom ens efter omförsöken hoppas de orden över – de
+    saknar då mening och tas med vid nästa körning.
+    Med choose_theme väljer Gemini temat i första lyckade anropet; resten använder samma tema.
     """
     result: dict[int, dict] = {}
+    unreachable: list[int] = []
     pending = list(range(len(words)))
+    first_call = True
     for round_no in (1, 2):
         if not pending:
             break
-        batch = [words[i] for i in pending]
-        prompt = build_prompt(batch, theme, cfg["learner"], int(cfg["max_words"]), title, choose_theme)
-        data = call_gemini(prompt, cfg["model"], api_key)
-        if choose_theme:
-            theme = str(data.get("theme") or "").strip()[:150]
-            choose_theme = False
         still = []
-        by_id = {it.get("id"): it for it in data.get("items", []) if isinstance(it, dict)}
-        for local_id, idx in enumerate(pending):
-            it = by_id.get(local_id)
-            if it and valid_item(it, int(cfg["max_words"])):
-                result[idx] = it
-            else:
-                still.append(idx)
+        for start in range(0, len(pending), batch_size):
+            chunk = pending[start:start + batch_size]
+            if not first_call:
+                time.sleep(batch_pause)
+            first_call = False
+            prompt = build_prompt([words[i] for i in chunk], theme, cfg["learner"], int(cfg["max_words"]),
+                                  title, choose_theme)
+            try:
+                data = call_gemini(prompt, cfg["model"], api_key)
+            except RuntimeError as e:
+                print(f"  {e}".splitlines()[0][:300])
+                print(f"  Ger upp {len(chunk)} ord för den här gången")
+                unreachable += chunk
+                continue
+            if choose_theme:
+                theme = str(data.get("theme") or "").strip()[:150]
+                choose_theme = False
+            by_id = {it.get("id"): it for it in data.get("items", []) if isinstance(it, dict)}
+            for local_id, idx in enumerate(chunk):
+                it = by_id.get(local_id)
+                if it and valid_item(it, int(cfg["max_words"])):
+                    result[idx] = it
+                else:
+                    still.append(idx)
         if still and round_no == 1:
             print(f"  {len(still)} meningar klarade inte kontrollen, försöker igen …")
         pending = still
     for idx in pending:
         print(f"  Hoppar över '{words[idx]['en']}' (ingen giltig mening)")
-    return result, theme
+    return result, theme, len(unreachable)
 
 
 # ---------------------------------------------------------------- huvudflöde
@@ -220,11 +256,12 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
         print(f"{path.name}: alla ord har meningar")
         return False
 
+    unreachable = 0
     if todo:
         choose_theme = theme_auto and not theme
         print(f"{path.name}: genererar {len(todo)} meningar (tema: {'väljs av Gemini' if choose_theme else theme})")
-        generated, theme = generate(todo, theme, cfg, api_key, info["title"], choose_theme)
-        if choose_theme:
+        generated, theme, unreachable = generate(todo, theme, cfg, api_key, info["title"], choose_theme)
+        if choose_theme and generated:
             print(f"  Gemini valde tema: {theme or '(inget)'}")
         for idx, it in generated.items():
             w = todo[idx]
@@ -240,12 +277,17 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
             }
 
     items = [existing[(w["sv"], w["en"])] for w in info["words"] if (w["sv"], w["en"]) in existing]
-    out_path.write_text(
-        json.dumps({"items": items}, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    print(f"  skrev {out_path.relative_to(root_dir)} ({len(items)} meningar)")
-    return True
+    changed = bool(items) or out_path.exists()  # skapa ingen tom meningsfil
+    if changed:
+        out_path.write_text(
+            json.dumps({"items": items}, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(f"  skrev {out_path.relative_to(root_dir)} ({len(items)} meningar)")
+    if unreachable:
+        # det som lyckades är sparat; resten tas vid nästa körning
+        raise RuntimeError(f"{unreachable} ord fick ingen mening (Gemini otillgänglig) – försöker igen vid nästa körning")
+    return changed
 
 
 def main() -> int:
