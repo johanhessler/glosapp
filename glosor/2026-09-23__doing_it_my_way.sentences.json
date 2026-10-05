@@ -52,9 +52,9 @@
     },
     {
       "sv": "välkänd",
-      "en": "well know",
-      "sentence_en": "She is a well known artist in our town.",
-      "sentence_sv": "Hon är en välkänd konstnär i vår stad.",
+      "en": "well known",
+      "sentence_en": "Her fan fiction is well known in the club.",
+      "sentence_sv": "Hennes fanfiction är välkänd i klubben.",
       "target": "well known",
       "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
       "theme_auto": false,
