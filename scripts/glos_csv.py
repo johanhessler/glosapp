@@ -21,7 +21,7 @@ def read_list(path: Path) -> dict:
 
     Stödda kommentarsrader överst i filen:
         # titel: Djur på bondgården
-        # tema: fotboll och Premier League     (ersätter interests i sentences_config.json för just den listan)
+        # tema: fotboll och Premier League     (tema för exempelmeningarna)
     """
     text = path.read_text(encoding="utf-8-sig")
     meta = {"titel": None, "tema": None}

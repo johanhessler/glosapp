@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       regenerate:
-        description: "Gör om olåsta meningar som har ett annat tema (t.ex. efter att du ändrat interests)"
+        description: "Gör om olåsta meningar som har ett annat tema (t.ex. efter att du ändrat # tema: i en CSV)"
         type: boolean
         default: false
 

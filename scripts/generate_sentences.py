@@ -8,7 +8,7 @@ mening skickas till Gemini, så varje ord kostar ett anrop en gång.
     GEMINI_API_KEY=... python scripts/generate_sentences.py --regenerate  # gör om alla olåsta
                                                                           # meningar med annat tema
 
-Tema: "interests" i sentences_config.json, eller "# tema: ..." överst i en enskild CSV.
+Tema: "# tema: ..." överst i CSV-filen. Utan tema blir det vardagliga meningar.
 Vill du behålla en mening du rättat för hand: sätt "locked": true på raden i JSON-filen.
 """
 import argparse
@@ -29,7 +29,6 @@ config_file = root_dir / "sentences_config.json"
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 default_config = {
-    "interests": [],
     "learner": "svensk elev i mellanstadiet, nybörjare i engelska (ungefär CEFR A1–A2)",
     "max_words": 12,
     "model": "gemini-3.5-flash",
@@ -44,7 +43,7 @@ def build_prompt(words: list[dict], theme: str, learner: str, max_words: int) ->
     )
     theme_rule = (
         f"- THEME: set every sentence in this world: {theme}. "
-        "Use the theme whenever it fits naturally (machines, animals, places, people and work in that world). "
+        "Use the theme whenever it fits naturally (places, people, objects and activities in that world). "
         "If a word really cannot fit the theme, write a simple everyday sentence instead - never a strange or forced sentence.\n"
         if theme else ""
     )
@@ -165,18 +164,11 @@ def load_config() -> dict:
     return cfg
 
 
-def theme_for(list_theme: str | None, cfg: dict) -> str:
-    if list_theme:
-        return list_theme
-    interests = cfg.get("interests") or []
-    return ", ".join(interests) if isinstance(interests, list) else str(interests)
-
-
 def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
     info = read_list(path)
     if not info["words"]:
         return False
-    theme = theme_for(info["theme"], cfg)
+    theme = info["theme"] or ""
     out_path = path.with_suffix(".sentences.json")
     existing = {}
     if out_path.exists():

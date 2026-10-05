@@ -1,6 +1,6 @@
 # Glosförhör
 
-En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gratis på GitHub Pages. Glosorna ligger som CSV-filer i mappen `glosor/`, och när du pushar en ny fil dyker listan upp i appen inom någon minut. Gemini (gratisnivån) skriver dessutom en exempelmening per glosa, i ett tema som du väljer.
+En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gratis på GitHub Pages. Glosorna ligger som CSV-filer i mappen `glosor/`, och när du pushar en ny fil dyker listan upp i appen inom någon minut. Gemini (gratisnivån) skriver dessutom en exempelmening per glosa, i ett tema som du väljer per lista.
 
 ## Arkitektur
 
@@ -77,7 +77,7 @@ läsa;(to) read
 |---|---|
 | Filnamn | `ÅÅÅÅ-vVV-namn.csv` eller `ÅÅÅÅ-MM-DD-namn.csv`. Listorna sorteras med senaste först. |
 | `# titel: …` | Valfri. Om raden saknas skapas titeln från filnamnet (`2026-v41-djur.csv` blir "Djur"). |
-| `# tema: …` | Valfri. Tema för meningarna i just den här listan, t.ex. `# tema: fotboll`. Ersätter `interests` i `sentences_config.json`. |
+| `# tema: …` | Valfri. Tema för exempelmeningarna i den här listan, t.ex. `# tema: äldreboende och vardag`. Utan tema blir det vardagliga meningar. |
 | Rubrikrad | Valfri: `svenska;engelska`. |
 | Avgränsare | `;`, `,` eller tab. Appen känner av vilken som används på första raden. Excel med svenska inställningar sparar med `;`. |
 | Flera rätta svar | Separera med `\|`, till exempel `rubber\|eraser`. Det första alternativet visas i flerval och memory. |
@@ -88,11 +88,14 @@ Kolumn 1 är frågespråket (svenska) och kolumn 2 är svarsspråket (engelska).
 
 ## Exempelmeningar med Gemini
 
+### Tema: `# tema:` i CSV-filen
+
+Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exempel `# tema: äldreboende och vardag` överst i CSV-filen. Ju mer konkret, desto bättre ("skördetröskor, balpressar och mjölkkor" fungerar bättre än "John Deere-traktorer", eftersom prompten undviker varumärken). Om en glosa inte passar temat skriver Gemini en vardaglig mening i stället för en krystad. Saknas raden blir alla meningar vardagliga.
+
 ### Inställningar: `sentences_config.json`
 
 ```json
 {
-  "interests": ["traktorer", "lantbruk", "skördetröskor och andra jordbruksmaskiner"],
   "learner": "svensk elev i årskurs 5, nybörjare i engelska (ungefär CEFR A1–A2)",
   "max_words": 12,
   "model": "gemini-3.5-flash"
@@ -101,7 +104,6 @@ Kolumn 1 är frågespråket (svenska) och kolumn 2 är svarsspråket (engelska).
 
 | Fält | Betydelse |
 |---|---|
-| `interests` | Den värld meningarna ska utspela sig i. Ju mer konkret, desto bättre ("John Deere-traktorer" fungerar sämre eftersom prompten undviker varumärken; "skördetröskor, balpressar och mjölkkor" fungerar bra). Om en glosa inte passar temat skriver Gemini en vardaglig mening i stället för en krystad. |
 | `learner` | Nivån. Påverkar hur enkla orden och grammatiken blir. |
 | `max_words` | Ungefärlig maxlängd per mening. |
 | `model` | Gemini-modell. Google byter namn ofta, se [modellistan](https://ai.google.dev/gemini-api/docs/models) och välj en Flash-modell som ingår i gratisnivån. |
@@ -112,16 +114,16 @@ Kolumn 1 är frågespråket (svenska) och kolumn 2 är svarsspråket (engelska).
 {
   "sv": "leverera",
   "en": "deliver",
-  "sentence_en": "The big tractor delivers the grain to the farm.",
-  "sentence_sv": "Den stora traktorn levererar säden till gården.",
-  "target": "delivers",
-  "theme": "traktorer, lantbruk",
+  "sentence_en": "They deliver fresh flowers to the lobby every Monday.",
+  "sentence_sv": "De levererar färska blommor till entrén varje måndag.",
+  "target": "deliver",
+  "theme": "äldreboende och vardag",
   "locked": false
 }
 ```
 
 - **Rätta en mening:** redigera filen direkt på GitHub och sätt `"locked": true`, så skrivs den aldrig över.
-- **Byta tema för gamla listor:** ändra `interests`, gå till *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar med annat tema om. Nya listor får alltid det aktuella temat automatiskt.
+- **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha, gå sedan till *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar som har ett annat tema om. Nya ord får alltid listans aktuella tema automatiskt.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
 - Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions, och listan saknar meningar tills nästa körning.
 
@@ -171,7 +173,7 @@ python -m http.server 8000           # öppna http://localhost:8000
 glosapp/
 ├── index.html                  # hela appen (HTML + CSS + JS, inga beroenden)
 ├── manifest.webmanifest        # gör att den kan installeras på hemskärmen
-├── sentences_config.json       # tema, nivå och modell för exempelmeningarna
+├── sentences_config.json       # nivå, längd och modell för exempelmeningarna
 ├── icon.svg, icon-192.png, icon-512.png
 ├── glosor/
 │   ├── 2026-v40-skolan.csv     # exempel

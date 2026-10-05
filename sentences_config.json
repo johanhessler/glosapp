@@ -1,5 +1,4 @@
 {
-  "interests": ["traktorer", "lantbruk", "skördetröskor och andra jordbruksmaskiner"],
   "learner": "svensk elev i årskurs 5, nybörjare i engelska (ungefär CEFR A1–A2)",
   "max_words": 12,
   "model": "gemini-3.5-flash"
