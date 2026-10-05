@@ -2,12 +2,14 @@
 
 En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gratis på GitHub Pages. Glosorna ligger som CSV-filer i mappen `glosor/`, och när du pushar en ny fil dyker listan upp i appen inom någon minut. Gemini (gratisnivån) skriver dessutom en exempelmening per glosa, i ett tema som du väljer per lista.
 
+**Appen:** <https://johanhessler.github.io/glosapp/>
+
 ## Arkitektur
 
 ```mermaid
 flowchart LR
     subgraph du["Du (förälder)"]
-        csv["Ny CSV-fil<br/>glosor/2026-v42-kapitel-4.csv"]
+        csv["Ny CSV-fil<br/>glosor/2026-10-14__kapitel_4.csv"]
         script["Eget skript (senare)<br/>t.ex. glosor.eu → CSV"]
     end
 
@@ -15,7 +17,7 @@ flowchart LR
         repo[("main-branch<br/>index.html<br/>glosor/*.csv")]
         gen["GitHub Action steg 1<br/>generate_sentences.py"]
         action["GitHub Action steg 2<br/>build_index.py → glosor/index.json"]
-        pages["GitHub Pages<br/>USER.github.io/REPO"]
+        pages["GitHub Pages<br/>johanhessler.github.io/glosapp"]
     end
 
     gemini["Gemini API<br/>(gratisnivå, GEMINI_API_KEY)"]
@@ -50,7 +52,7 @@ flowchart LR
 | ✏️ Skriv svaret | Klassiskt förhör. Fel svar kommer tillbaka senare i rundan tills alla sitter. Små stavfel ger "Nästan!" och visar rätt stavning. |
 | 🔘 Flerval | Välj rätt bland fyra alternativ från samma lista. |
 | 🃏 Flashcards | Vänd kortet och svara "Kunde" eller "Kunde inte". De kort han inte kunde kommer tillbaka. |
-| 🧠 Memory | Para ihop svenska och engelska ord (8 par). Poängen är antal försök. |
+| 🧠 Memory | Para ihop svenska och engelska ord (8 par). Poängen bygger på antal försök (8 par på 8 försök = 100 %). |
 | 🎧 Hörförhör | Hör det engelska ordet och stava det. "Ledtråd" visar den svenska betydelsen. |
 | 🧩 Lucktext | Meningen visas med en lucka där glosan ska stå. Den svenska betydelsen visas som ledtråd. Skriver han rätt ord i fel form ("read" när det ska vara "reads") får han "Rätt ord! Men i meningen ska det stå …". Läget visas bara för listor som har meningar. |
 
@@ -63,20 +65,24 @@ Det finns också några inställningar:
 - **Sträng stavning:** när den är på räknas även "nästan rätt" som fel.
 - **Svåra ord:** ord han har missat samlas per lista och kan övas separat.
 
+Under 📊 (uppe till höger på startsidan) finns resultaten per lista. De kan nollställas där.
+
 ## CSV-format
 
 ```csv
-# titel: Djur på bondgården
+# titel: Forever Young
+# tema: äldreboende och vardag
 svenska;engelska
-häst;horse
-tupp;rooster|cock
+sjuksköterska;nurse
+rullator;walking frame
+suddgummi;rubber|eraser
 läsa;(to) read
 ```
 
 | Regel | Förklaring |
 |---|---|
-| Filnamn | `ÅÅÅÅ-vVV-namn.csv` eller `ÅÅÅÅ-MM-DD-namn.csv`. Listorna sorteras med senaste först. |
-| `# titel: …` | Valfri. Om raden saknas skapas titeln från filnamnet (`2026-v41-djur.csv` blir "Djur"). |
+| Filnamn | `ÅÅÅÅ-MM-DD__namn.csv`, t.ex. `2026-10-07__forever_young.csv`. `ÅÅÅÅ-vVV-namn.csv` fungerar också, men blanda inte formaten: listorna sorteras på filnamnet, senaste först, och då hamnar v-filerna alltid överst. |
+| `# titel: …` | Valfri. Om raden saknas skapas titeln från filnamnet (`2026-10-07__forever_young.csv` blir "Forever young"). |
 | `# tema: …` | Valfri. Tema för exempelmeningarna i den här listan, t.ex. `# tema: äldreboende och vardag`. Utan tema blir det vardagliga meningar. |
 | Rubrikrad | Valfri: `svenska;engelska`. |
 | Avgränsare | `;`, `,` eller tab. Appen känner av vilken som används på första raden. Excel med svenska inställningar sparar med `;`. |
@@ -128,36 +134,29 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
 - Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions, och listan saknar meningar tills nästa körning.
 
-## Komma igång
+## Uppsättning
 
-1. **Skapa ett repo** på GitHub, t.ex. `glosor`. Det måste vara publikt för gratis GitHub Pages. Glosorna blir alltså offentliga, men de innehåller inget personligt.
-2. **Pusha innehållet** i den här mappen:
-   ```bash
-   cd glosapp
-   git init -b main
-   git add .
-   git commit -m "Glosförhör"
-   git remote add origin git@github.com:<user>/glosor.git
-   git push -u origin main
-   ```
-3. **Slå på Pages:** gå till repot → *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
-4. **Skapa en Gemini-nyckel:** logga in på [aistudio.google.com](https://aistudio.google.com) med ditt Google-konto → **Get API key** → *Create API key*. Det kostar inget på gratisnivån och kräver inget betalkort. Observera att Google enligt villkoren för gratisnivån kan använda innehållet (här bara glosor) för att förbättra sina produkter.
-5. **Lägg nyckeln i repot:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**. Namn: `GEMINI_API_KEY`, värde: nyckeln.
-6. **Ge workflowen skrivrätt** (så att den kan committa meningarna): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions** → *Save*.
-7. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter. Därefter ligger `*.sentences.json` i `glosor/`, och adressen är `https://<user>.github.io/glosor/`.
-8. **Lägg appen på hemskärmen** på sonens iPhone: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app.
+Repot [johanhessler/glosapp](https://github.com/johanhessler/glosapp) är redan uppsatt. Stegen nedan behövs bara om det ska göras om, t.ex. i ett nytt repo.
+
+1. **Publikt repo** på GitHub. Det krävs för gratis GitHub Pages, så glosorna är offentliga, men de innehåller inget personligt. `CLAUDE.md` och `.claude/` är git-ignorerade och hamnar aldrig i repot.
+2. **Pages:** *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
+3. **Gemini-nyckel:** logga in på [aistudio.google.com](https://aistudio.google.com) → **Get API key** → *Create API key*. Gratisnivån kräver inget betalkort. Enligt villkoren kan Google använda innehållet (här bara glosor) för att förbättra sina produkter.
+4. **Nyckeln som secret:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**. Namn: `GEMINI_API_KEY`.
+5. **Skrivrätt för workflowen** (så att den kan committa meningarna): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions**.
+6. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter.
+7. **Hemskärmen** på sonens iPhone: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app. På Chromebook: öppna adressen i Chrome och installera den som app via menyn ⋮ (exakt menytext varierar mellan Chrome-versioner).
 
 ## Lägga till en ny glosvecka
 
 ```bash
-# skapa filen (eller exportera från Excel som CSV med ;)
-code glosor/2026-v42-kapitel-4.csv
-git add glosor/2026-v42-kapitel-4.csv
-git commit -m "Glosor v42"
+git pull                                  # workflowen har committat meningsfiler sedan sist
+code glosor/2026-10-14__kapitel_4.csv     # eller exportera från Excel som CSV med ;
+git add glosor/2026-10-14__kapitel_4.csv
+git commit -m "Glosor kapitel 4"
 git push
 ```
 
-Workflowen genererar meningar för de nya orden, committar dem, bygger `glosor/index.json` och publicerar på nytt. Du behöver aldrig redigera `index.json` för hand. Gör `git pull` innan du lägger till nästa lista, eftersom workflowen har committat meningsfilen.
+Workflowen genererar meningar för de nya orden, committar dem (`[skip ci]`), bygger `glosor/index.json` och publicerar på nytt. Efter 1–2 minuter syns listan i appen. Du behöver aldrig redigera `index.json` för hand.
 
 **Testa lokalt:**
 
@@ -176,17 +175,22 @@ glosapp/
 ├── manifest.webmanifest        # gör att den kan installeras på hemskärmen
 ├── sentences_config.json       # nivå, längd och modell för exempelmeningarna
 ├── icon.svg, icon-192.png, icon-512.png
+├── .gitignore                  # CLAUDE.md, .claude/, _site/, __pycache__/
 ├── glosor/
-│   ├── 2026-v40-skolan.csv     # exempel
-│   ├── 2026-v41-djur.csv       # exempel
+│   ├── 2026-10-07__forever_young.csv  # en glosvecka = en CSV
 │   ├── *.sentences.json        # genereras av Gemini – får redigeras (sätt "locked": true)
 │   └── index.json              # genereras – skrivs över av workflowen
 ├── scripts/
 │   ├── glos_csv.py             # gemensam CSV-inläsning
-│   ├── generate_sentences.py   # Gemini → *.sentences.json (bara nya ord)
+│   ├── generate_sentences.py   # Gemini → *.sentences.json (nya ord + ändrat tema)
 │   └── build_index.py          # bygger index.json
 └── .github/workflows/pages.yml # meningar → commit → index → GitHub Pages
 ```
+
+## Kända begränsningar
+
+- **Ordförslag på Android:** Gboard visar ordförslag i svarsfälten trots att sidan ber om att slippa dem. iPhone och iPad respekterar inställningen.
+- **Resultaten följer inte med** mellan enheter, t.ex. mellan iPhone och Chromebook (se nästa steg).
 
 ## Möjliga nästa steg
 
