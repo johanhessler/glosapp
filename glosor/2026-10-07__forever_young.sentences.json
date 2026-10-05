@@ -1,0 +1,166 @@
+{
+  "items": [
+    {
+      "sv": "brinna för",
+      "en": "be passionate about",
+      "sentence_en": "Grandma is passionate about playing cards.",
+      "sentence_sv": "Mormor brinner för att spela kort.",
+      "target": "is passionate about",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "förmåga att tänka kritiskt",
+      "en": "critical thinking skills",
+      "sentence_en": "We use our critical thinking skills to play chess.",
+      "sentence_sv": "Vi använder vår förmåga att tänka kritiskt för att spela schack.",
+      "target": "critical thinking skills",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "regelbundet",
+      "en": "regularly",
+      "sentence_en": "The doctor visits the retirement home regularly.",
+      "sentence_sv": "Läkaren besöker äldreboendet regelbundet.",
+      "target": "regularly",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "höft",
+      "en": "hip",
+      "sentence_en": "Grandma has a sore hip after her walk.",
+      "sentence_sv": "Mormor har en öm höft efter sin promenad.",
+      "target": "hip",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "nyligen",
+      "en": "recently",
+      "sentence_en": "He recently moved to this nice care home.",
+      "sentence_sv": "Han flyttade nyligen till detta trevliga äldreboende.",
+      "target": "recently",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "nyans",
+      "en": "shade",
+      "sentence_en": "She likes this warm shade of pink for her room.",
+      "sentence_sv": "Hon gillar denna varma nyans av rosa till sitt rum.",
+      "target": "shade",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "leverera",
+      "en": "deliver",
+      "sentence_en": "They deliver fresh flowers to the lobby every Monday.",
+      "sentence_sv": "De levererar färska blommor till lobbyn varje måndag.",
+      "target": "deliver",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "sjuksköterska",
+      "en": "nurse",
+      "sentence_en": "The kind nurse brings warm tea to the room.",
+      "sentence_sv": "Den snälla sjuksköterskan tar med sig varmt te till rummet.",
+      "target": "nurse",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "kock",
+      "en": "chef",
+      "sentence_en": "The chef makes delicious soup for lunch today.",
+      "sentence_sv": "Kocken lagar jättegod soppa till lunch idag.",
+      "target": "chef",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "underhållning",
+      "en": "entertainment",
+      "sentence_en": "The piano player provides great entertainment for the residents.",
+      "sentence_sv": "Pianospelaren bjuder på bra underhållning för de boende.",
+      "target": "entertainment",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "volontär",
+      "en": "volunteer",
+      "sentence_en": "A friendly volunteer reads the newspaper to Grandpa.",
+      "sentence_sv": "En vänlig volontär läser tidningen för morfar.",
+      "target": "volunteer",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "fäktning",
+      "en": "fencing",
+      "sentence_en": "They love to watch fencing on the television.",
+      "sentence_sv": "De älskar att titta på fäktning på tv.",
+      "target": "fencing",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "tvivel",
+      "en": "doubts",
+      "sentence_en": "He has no doubts that he will win the game.",
+      "sentence_sv": "Han har inga tvivel om att han kommer att vinna spelet.",
+      "target": "doubts",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "boende",
+      "en": "resident",
+      "sentence_en": "Every resident gets a sweet cake on their birthday.",
+      "sentence_sv": "Varje boende får en söt tårta på sin födelsedag.",
+      "target": "resident",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "rullator",
+      "en": "walking frame",
+      "sentence_en": "She uses a walking frame to go to the garden.",
+      "sentence_sv": "Hon använder en rullator för att gå till trädgården.",
+      "target": "walking frame",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "utmaning",
+      "en": "challenge",
+      "sentence_en": "This big puzzle is a fun challenge for the group.",
+      "sentence_sv": "Det här stora pusslet är en rolig utmaning för gruppen.",
+      "target": "challenge",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "framsteg",
+      "en": "progress",
+      "sentence_en": "Grandpa makes great progress with his new walking stick.",
+      "sentence_sv": "Morfar gör stora framsteg med sin nya käpp.",
+      "target": "progress",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    },
+    {
+      "sv": "tävling",
+      "en": "competition",
+      "sentence_en": "She won first prize in the baking competition.",
+      "sentence_sv": "Hon vann förstapris i bakningstävlingen.",
+      "target": "competition",
+      "theme": "äldreboende och vardag",
+      "locked": false
+    }
+  ]
+}
