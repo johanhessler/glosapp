@@ -29,13 +29,14 @@ list_dir = root_dir / "glosor"
 config_file = root_dir / "sentences_config.json"
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 retry_attempts = 8   # 7 omförsök: 15 + 30 + 60 + 4 × 120 s ≈ 10 min
-batch_size = 10      # ord per anrop – mindre anrop klarar sig bättre när Gemini är belastat
+batch_size = 50      # ord per anrop – i praktiken en hel lista; gränsen skyddar bara mot jättelistor
 batch_pause = 4      # s mellan anrop, snällt mot gratisnivåns gräns för anrop per minut
 
 default_config = {
     "learner": "svensk elev i mellanstadiet, nybörjare i engelska (ungefär CEFR A1–A2)",
     "max_words": 12,
-    "model": "gemini-3.5-flash",
+    "model": "gemini-3.8-flash",
+    "fallback_model": "",
 }
 
 
@@ -85,20 +86,24 @@ Words:
 
 
 # ---------------------------------------------------------------- Gemini
-def call_gemini(prompt: str, model: str, api_key: str) -> dict:
+def call_gemini(prompt: str, model: str, api_key: str, fallback_model: str = "") -> dict:
     body = json.dumps({
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 0.9},
     }).encode("utf-8")
-    req = urllib.request.Request(
-        api_url.format(model=model),
-        data=body,
-        headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
-        method="POST",
-    )
     # Gratisnivån svarar ofta 503 (hög belastning) eller 429 (för många anrop). Det gör inget
     # om det tar några minuter, så vi väntar 15, 30, 60 och sedan 120 s åt gången (~10 min totalt).
+    # Sista försöket görs med reservmodellen (om den finns), som har egen kapacitet och kvot.
     for attempt in range(1, retry_attempts + 1):
+        use_model = fallback_model if attempt == retry_attempts and fallback_model else model
+        if use_model != model:
+            print(f"  Sista försöket med reservmodellen {use_model} …")
+        req = urllib.request.Request(
+            api_url.format(model=use_model),
+            data=body,
+            headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
+            method="POST",
+        )
         try:
             with urllib.request.urlopen(req, timeout=180) as resp:
                 data = json.load(resp)
@@ -187,7 +192,7 @@ def generate(words: list[dict], theme: str, cfg: dict, api_key: str,
             prompt = build_prompt([words[i] for i in chunk], theme, cfg["learner"], int(cfg["max_words"]),
                                   title, choose_theme)
             try:
-                data = call_gemini(prompt, cfg["model"], api_key)
+                data = call_gemini(prompt, cfg["model"], api_key, cfg.get("fallback_model", ""))
             except RuntimeError as e:
                 print(f"  {e}".splitlines()[0][:300])
                 print(f"  Ger upp {len(chunk)} ord för den här gången")
