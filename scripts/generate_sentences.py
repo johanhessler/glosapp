@@ -7,7 +7,8 @@ mening skickas till Gemini, så varje ord kostar ett anrop en gång.
     GEMINI_API_KEY=... python scripts/generate_sentences.py               # nya ord + ändrat tema
     GEMINI_API_KEY=... python scripts/generate_sentences.py --regenerate  # gör om alla olåsta meningar
 
-Tema: "# tema: ..." överst i CSV-filen. Utan tema blir det vardagliga meningar.
+Tema: "# tema: ..." överst i CSV-filen. Saknas raden väljer Gemini ett tema utifrån titeln
+och orden. Det sparas i meningsfilen ("theme_auto": true) och återanvänds för nya ord.
 Ändras temat i en lista görs dess olåsta meningar om automatiskt vid nästa körning.
 Vill du behålla en mening du rättat för hand: sätt "locked": true på raden i JSON-filen.
 """
@@ -36,17 +37,28 @@ default_config = {
 
 
 # ---------------------------------------------------------------- prompt
-def build_prompt(words: list[dict], theme: str, learner: str, max_words: int) -> str:
+def build_prompt(words: list[dict], theme: str, learner: str, max_words: int,
+                 title: str = "", choose_theme: bool = False) -> str:
     word_lines = json.dumps(
         [{"id": i, "en": w["en"], "sv": w["sv"]} for i, w in enumerate(words)],
         ensure_ascii=False,
     )
-    theme_rule = (
-        f"- THEME: set every sentence in this world: {theme}. "
+    fit_rule = (
         "Use the theme whenever it fits naturally (places, people, objects and activities in that world). "
         "If a word really cannot fit the theme, write a simple everyday sentence instead - never a strange or forced sentence.\n"
-        if theme else ""
     )
+    item_format = '{"id": 0, "sentence_en": "...", "sentence_sv": "...", "target": "..."}'
+    if choose_theme:
+        # Gemini väljer tema för hela listan i samma anrop
+        theme_rule = (
+            f'- THEME: first choose ONE theme for the whole list, based on the chapter title "{title}" and the words: '
+            "a concrete world where most of the words fit naturally. Write the theme in Swedish, at most 12 words, "
+            'and return it as "theme". Then set every sentence in that world. ' + fit_rule
+        )
+        json_format = '{"theme": "...", "items": [' + item_format + "]}"
+    else:
+        theme_rule = f"- THEME: set every sentence in this world: {theme}. " + fit_rule if theme else ""
+        json_format = '{"items": [' + item_format + "]}"
     return f"""You write example sentences that help a Swedish child learn English vocabulary words.
 
 Learner: {learner}
@@ -62,7 +74,7 @@ Rules:
 - "target": the word exactly as it is written in sentence_en (same letters and form), so it can be blanked out in a gap-fill exercise.
 
 Return ONLY JSON in this format:
-{{"items": [{{"id": 0, "sentence_en": "...", "sentence_sv": "...", "target": "..."}}]}}
+{json_format}
 
 Words:
 {word_lines}
@@ -130,16 +142,23 @@ def valid_item(item: dict, max_words: int) -> bool:
     return bool(en and sv) and len(en.split()) <= max_words + 4 and target_in_sentence(target, en)
 
 
-def generate(words: list[dict], theme: str, cfg: dict, api_key: str) -> dict[int, dict]:
-    """Returnerar {index i words: item}. Försöker en gång till med de ord som blev fel."""
+def generate(words: list[dict], theme: str, cfg: dict, api_key: str,
+             title: str = "", choose_theme: bool = False) -> tuple[dict[int, dict], str]:
+    """Returnerar ({index i words: item}, tema). Försöker en gång till med de ord som blev fel.
+
+    Med choose_theme väljer Gemini temat i första anropet; omförsöket använder samma tema.
+    """
     result: dict[int, dict] = {}
     pending = list(range(len(words)))
     for round_no in (1, 2):
         if not pending:
             break
         batch = [words[i] for i in pending]
-        prompt = build_prompt(batch, theme, cfg["learner"], int(cfg["max_words"]))
+        prompt = build_prompt(batch, theme, cfg["learner"], int(cfg["max_words"]), title, choose_theme)
         data = call_gemini(prompt, cfg["model"], api_key)
+        if choose_theme:
+            theme = str(data.get("theme") or "").strip()[:150]
+            choose_theme = False
         still = []
         by_id = {it.get("id"): it for it in data.get("items", []) if isinstance(it, dict)}
         for local_id, idx in enumerate(pending):
@@ -153,7 +172,7 @@ def generate(words: list[dict], theme: str, cfg: dict, api_key: str) -> dict[int
         pending = still
     for idx in pending:
         print(f"  Hoppar över '{words[idx]['en']}' (ingen giltig mening)")
-    return result
+    return result, theme
 
 
 # ---------------------------------------------------------------- huvudflöde
@@ -168,19 +187,31 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
     info = read_list(path)
     if not info["words"]:
         return False
-    theme = info["theme"] or ""
     out_path = path.with_suffix(".sentences.json")
     existing = {}
     if out_path.exists():
         for it in json.loads(out_path.read_text(encoding="utf-8")).get("items", []):
             existing[(it.get("sv"), it.get("en"))] = it
 
+    # Tema från CSV:n, annars ett som Gemini redan valt för listan, annars låter vi Gemini välja
+    csv_theme = info["theme"] or ""
+    theme_auto = not csv_theme
+    if csv_theme:
+        theme = csv_theme
+    else:
+        theme = next((it["theme"] for it in existing.values() if it.get("theme_auto") and it.get("theme")), "")
+
+    def stale(old: dict) -> bool:
+        if csv_theme:
+            return (old.get("theme") or "") != csv_theme
+        return not old.get("theme_auto")  # # tema: borttagen → Gemini väljer nytt
+
     todo = []
     for w in info["words"]:
         old = existing.get((w["sv"], w["en"]))
         if old is None:
             todo.append(w)
-        elif not old.get("locked") and (regenerate or (old.get("theme") or "") != theme):
+        elif not old.get("locked") and (regenerate or stale(old)):
             todo.append(w)
 
     keep_keys = {(w["sv"], w["en"]) for w in info["words"]}
@@ -190,8 +221,11 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
         return False
 
     if todo:
-        print(f"{path.name}: genererar {len(todo)} meningar (tema: {theme or 'inget'})")
-        generated = generate(todo, theme, cfg, api_key)
+        choose_theme = theme_auto and not theme
+        print(f"{path.name}: genererar {len(todo)} meningar (tema: {'väljs av Gemini' if choose_theme else theme})")
+        generated, theme = generate(todo, theme, cfg, api_key, info["title"], choose_theme)
+        if choose_theme:
+            print(f"  Gemini valde tema: {theme or '(inget)'}")
         for idx, it in generated.items():
             w = todo[idx]
             existing[(w["sv"], w["en"])] = {
@@ -201,6 +235,7 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
                 "sentence_sv": it["sentence_sv"].strip(),
                 "target": it["target"].strip(),
                 "theme": theme,
+                "theme_auto": theme_auto,
                 "locked": False,
             }
 

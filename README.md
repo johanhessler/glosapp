@@ -1,6 +1,6 @@
 # Glosförhör
 
-En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gratis på GitHub Pages. Glosorna ligger som CSV-filer i mappen `glosor/`, och när du pushar en ny fil dyker listan upp i appen inom någon minut. Gemini (gratisnivån) skriver dessutom en exempelmening per glosa, i ett tema som du väljer per lista.
+En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gratis på GitHub Pages. Glosorna ligger som CSV-filer i mappen `glosor/`. En GitHub Action hämtar varje dag lärarens nya övningar från glosor.eu och gör om dem till CSV, men du kan också lägga till filer själv. Gemini (gratisnivån) skriver en exempelmening per glosa, i ett tema som du väljer per lista eller som Gemini väljer utifrån kapitlet.
 
 **Appen:** <https://johanhessler.github.io/glosapp/>
 
@@ -8,15 +8,17 @@ En glosförhörsapp utan reklam. Den består av en enda HTML-sida som hostas gra
 
 ```mermaid
 flowchart LR
+    glosoreu["glosor.eu<br/>(lärarens övningar, klassens inloggning)"]
+
     subgraph du["Du (förälder)"]
-        csv["Ny CSV-fil<br/>glosor/2026-10-14__kapitel_4.csv"]
-        script["Eget skript (senare)<br/>t.ex. glosor.eu → CSV"]
+        csv["Egen CSV-fil (valfritt)<br/>glosor/2026-10-14__kapitel_4.csv"]
     end
 
     subgraph gh["GitHub-repo"]
         repo[("main-branch<br/>index.html<br/>glosor/*.csv")]
-        gen["GitHub Action steg 1<br/>generate_sentences.py"]
-        action["GitHub Action steg 2<br/>build_index.py → glosor/index.json"]
+        fetch["GitHub Action steg 1 (dagligen)<br/>fetch_glosor.py"]
+        gen["GitHub Action steg 2<br/>generate_sentences.py"]
+        action["GitHub Action steg 3<br/>build_index.py → glosor/index.json"]
         pages["GitHub Pages<br/>johanhessler.github.io/glosapp"]
     end
 
@@ -28,11 +30,12 @@ flowchart LR
         tts["Inbyggd talsyntes<br/>(en-GB)"]
     end
 
-    csv -->|git push| repo
-    script -.->|git push| repo
-    repo --> gen
-    gen -->|nya ord + tema| gemini
-    gemini -->|meningar som JSON| gen
+    csv -.->|git push| repo
+    glosoreu -->|nya övningar| fetch
+    fetch -->|commit nya *.csv| repo
+    fetch --> gen
+    gen -->|nya ord + tema/titel| gemini
+    gemini -->|meningar + tema som JSON| gen
     gen -->|commit *.sentences.json| repo
     gen --> action --> pages
     pages -->|index.json + CSV + meningar| app
@@ -41,7 +44,7 @@ flowchart LR
 ```
 
 - **Ingen server och ingen databas.** Appen läser `glosor/index.json`, sedan den CSV-fil som väljs och, om den finns, tillhörande `.sentences.json`.
-- **Gemini anropas bara i GitHub Action**, aldrig från appen. API-nyckeln ligger som GitHub Secret och syns inte för den som öppnar sidan. Bara ord som saknar mening skickas (och ord i en lista vars tema du har ändrat), så varje ord genereras normalt en gång.
+- **glosor.eu och Gemini anropas bara i GitHub Action**, aldrig från appen. API-nyckeln och klassens inloggning ligger som GitHub Secrets och syns inte i repot eller för den som öppnar sidan. Bara ord som saknar mening skickas (och ord i en lista vars tema du har ändrat), så varje ord genereras normalt en gång.
 - **Resultaten sparas bara på enheten** (i webbläsarens localStorage). Om han byter enhet eller rensar webbläsardatan börjar statistiken om från noll.
 - **Uppläsningen** använder enhetens inbyggda talsyntes (Web Speech API), så det behövs varken API-nyckel eller nätverk för ljudet.
 
@@ -83,7 +86,8 @@ läsa;(to) read
 |---|---|
 | Filnamn | `ÅÅÅÅ-MM-DD__namn.csv`, t.ex. `2026-10-07__forever_young.csv`. `ÅÅÅÅ-vVV-namn.csv` fungerar också, men blanda inte formaten: listorna sorteras på filnamnet, senaste först, och då hamnar v-filerna alltid överst. |
 | `# titel: …` | Valfri. Om raden saknas skapas titeln från filnamnet (`2026-10-07__forever_young.csv` blir "Forever young"). |
-| `# tema: …` | Valfri. Tema för exempelmeningarna i den här listan, t.ex. `# tema: äldreboende och vardag`. Utan tema blir det vardagliga meningar. |
+| `# tema: …` | Valfri. Tema för exempelmeningarna i den här listan, t.ex. `# tema: äldreboende och vardag`. Utan raden väljer Gemini ett tema. |
+| `# källa: …` | Skrivs av hämtningen från glosor.eu (övningens adress). Används för att inte hämta samma övning två gånger. |
 | Rubrikrad | Valfri: `svenska;engelska`. |
 | Avgränsare | `;`, `,` eller tab. Appen känner av vilken som används på första raden. Excel med svenska inställningar sparar med `;`. |
 | Flera rätta svar | Separera med `\|`, till exempel `rubber\|eraser`. Det första alternativet visas i flerval och memory. |
@@ -96,7 +100,9 @@ Kolumn 1 är frågespråket (svenska) och kolumn 2 är svarsspråket (engelska).
 
 ### Tema: `# tema:` i CSV-filen
 
-Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exempel `# tema: äldreboende och vardag` överst i CSV-filen. Ju mer konkret, desto bättre ("skördetröskor, balpressar och mjölkkor" fungerar bättre än "John Deere-traktorer", eftersom prompten undviker varumärken). Om en glosa inte passar temat skriver Gemini en vardaglig mening i stället för en krystad. Saknas raden blir alla meningar vardagliga.
+Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exempel `# tema: äldreboende och vardag` överst i CSV-filen. Ju mer konkret, desto bättre ("skördetröskor, balpressar och mjölkkor" fungerar bättre än "John Deere-traktorer", eftersom prompten undviker varumärken). Om en glosa inte passar temat skriver Gemini en vardaglig mening i stället för en krystad.
+
+**Saknas raden väljer Gemini ett tema** utifrån listans titel och orden, i samma anrop som meningarna skrivs. Temat sparas i meningsfilen (`"theme_auto": true`) och används även för ord som läggs till senare. Skriver du ett eget `# tema:` senare tar det över, och meningarna görs om. Vill du ha vardagliga meningar skriver du `# tema: vardag`.
 
 ### Inställningar: `sentences_config.json`
 
@@ -124,15 +130,30 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
   "sentence_sv": "De levererar färska blommor till entrén varje måndag.",
   "target": "deliver",
   "theme": "äldreboende och vardag",
+  "theme_auto": false,
   "locked": false
 }
 ```
 
 - **Rätta en mening:** redigera filen direkt på GitHub och sätt `"locked": true`, så skrivs den aldrig över.
-- **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden blir de vardagliga.
+- **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden väljer Gemini ett nytt.
 - **Få nya varianter av alla meningar:** *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar om, även de som redan har rätt tema.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
 - Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions, och listan saknar meningar tills nästa körning.
+
+## Automatisk hämtning från glosor.eu
+
+Workflowen körs varje dag kl. 16 (svensk sommartid, 15 vintertid). Då loggar `scripts/fetch_glosor.py` in med klassens konto, läser listan över övningar och skriver en CSV för varje övning som inte redan finns, t.ex. `2026-10-07__forever_young.csv` med titeln "Forever Young". Gemini väljer tema och skriver meningar, botten committar allt och appen publiceras. Du behöver alltså inte göra något, men kör `git pull` innan du ändrar något lokalt.
+
+- **Kör direkt** i stället för att vänta: *Actions* → *Publicera glosappen* → *Run workflow*.
+- **Ändra tiden:** `cron` i `.github/workflows/pages.yml` (UTC).
+- **Rätta en hämtad lista** (t.ex. ett stavfel från läraren): redigera CSV-filen och pusha. Filen hämtas inte igen eftersom raden `# källa:` finns kvar.
+- **Lokalt:** `python scripts/fetch_glosor.py --dry-run` visar vad som skulle hämtas. Inloggningen läses då från `local/.env` (git-ignorerad):
+  ```
+  GLOSOR_EU_USER=...
+  GLOSOR_EU_PASS=...
+  ```
+- Om glosor.eu krånglar eller ändrar sidornas struktur publiceras appen ändå. Steget får en varning i Actions.
 
 ## Uppsättning
 
@@ -141,15 +162,17 @@ Repot [johanhessler/glosapp](https://github.com/johanhessler/glosapp) är redan 
 1. **Publikt repo** på GitHub. Det krävs för gratis GitHub Pages, så glosorna är offentliga, men de innehåller inget personligt. `CLAUDE.md` och `.claude/` är git-ignorerade och hamnar aldrig i repot.
 2. **Pages:** *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
 3. **Gemini-nyckel:** logga in på [aistudio.google.com](https://aistudio.google.com) → **Get API key** → *Create API key*. Gratisnivån kräver inget betalkort. Enligt villkoren kan Google använda innehållet (här bara glosor) för att förbättra sina produkter.
-4. **Nyckeln som secret:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**. Namn: `GEMINI_API_KEY`.
-5. **Skrivrätt för workflowen** (så att den kan committa meningarna): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions**.
+4. **Secrets:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**: `GEMINI_API_KEY`, `GLOSOR_EU_USER` och `GLOSOR_EU_PASS`. De två sista kan också sättas från `local/.env` med `gh secret set -f local/.env`.
+5. **Skrivrätt för workflowen** (så att den kan committa glosor och meningar): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions**.
 6. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter.
 7. **Hemskärmen** på sonens iPhone: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app. På Chromebook: öppna adressen i Chrome och installera den som app via menyn ⋮ (exakt menytext varierar mellan Chrome-versioner).
 
-## Lägga till en ny glosvecka
+## Lägga till en egen lista
+
+Listor från glosor.eu kommer automatiskt. Vill du lägga till en egen:
 
 ```bash
-git pull                                  # workflowen har committat meningsfiler sedan sist
+git pull                                  # botten har committat glosor och meningar sedan sist
 code glosor/2026-10-14__kapitel_4.csv     # eller exportera från Excel som CSV med ;
 git add glosor/2026-10-14__kapitel_4.csv
 git commit -m "Glosor kapitel 4"
@@ -161,6 +184,7 @@ Workflowen genererar meningar för de nya orden, committar dem (`[skip ci]`), by
 **Testa lokalt:**
 
 ```bash
+python scripts/fetch_glosor.py --dry-run   # kräver local/.env, annars hoppas den över
 export GEMINI_API_KEY=...            # valfritt – utan nyckel hoppas meningarna över
 python scripts/generate_sentences.py
 python scripts/build_index.py
@@ -175,16 +199,18 @@ glosapp/
 ├── manifest.webmanifest        # gör att den kan installeras på hemskärmen
 ├── sentences_config.json       # nivå, längd och modell för exempelmeningarna
 ├── icon.svg, icon-192.png, icon-512.png
-├── .gitignore                  # CLAUDE.md, .claude/, _site/, __pycache__/
+├── .gitignore                  # CLAUDE.md, .claude/, local/, _site/, __pycache__/
+├── local/                      # git-ignorerad: .env med glosor.eu-inloggning, sparade sidor
 ├── glosor/
-│   ├── 2026-10-07__forever_young.csv  # en glosvecka = en CSV
+│   ├── 2026-10-07__forever_young.csv  # en övning = en CSV
 │   ├── *.sentences.json        # genereras av Gemini – får redigeras (sätt "locked": true)
 │   └── index.json              # genereras – skrivs över av workflowen
 ├── scripts/
+│   ├── fetch_glosor.py         # glosor.eu → nya *.csv
 │   ├── glos_csv.py             # gemensam CSV-inläsning
-│   ├── generate_sentences.py   # Gemini → *.sentences.json (nya ord + ändrat tema)
+│   ├── generate_sentences.py   # Gemini → *.sentences.json (nya ord, ändrat tema, ev. tema)
 │   └── build_index.py          # bygger index.json
-└── .github/workflows/pages.yml # meningar → commit → index → GitHub Pages
+└── .github/workflows/pages.yml # (dagligen) hämta → meningar → commit → index → Pages
 ```
 
 ## Kända begränsningar
@@ -194,5 +220,4 @@ glosapp/
 
 ## Möjliga nästa steg
 
-- **Skript för glosor.eu → CSV.** Lärarens övningar kräver klassens inloggning, så ett lokalt skript (utanför repot) loggar in, hämtar nya övningar och skriver dem som CSV.
 - **Se resultaten från din dator.** Det kräver en liten backend, t.ex. en Supabase-tabell eller en Azure Function, som appen skickar rundresultat till.

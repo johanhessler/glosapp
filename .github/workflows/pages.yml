@@ -3,6 +3,8 @@ name: Publicera glosappen
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 14 * * *"   # dagligen 16:00 svensk sommartid (15:00 vintertid): hämta nya övningar från glosor.eu
   workflow_dispatch:
     inputs:
       regenerate:
@@ -34,6 +36,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Hämta nya övningar från glosor.eu
+        continue-on-error: true   # om glosor.eu krånglar publiceras appen ändå
+        env:
+          GLOSOR_EU_USER: ${{ secrets.GLOSOR_EU_USER }}
+          GLOSOR_EU_PASS: ${{ secrets.GLOSOR_EU_PASS }}
+        run: python scripts/fetch_glosor.py
+
       - name: Generera exempelmeningar med Gemini
         id: sentences
         continue-on-error: true   # om Gemini krånglar publiceras appen ändå, utan nya meningar
@@ -41,15 +50,20 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/generate_sentences.py ${{ inputs.regenerate && '--regenerate' || '' }}
 
-      - name: Committa nya meningar till repot
+      - name: Committa nya glosor och meningar till repot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add glosor/*.sentences.json 2>/dev/null || true
+          git add glosor/*.csv glosor/*.sentences.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "Inga nya meningar att committa"
+            echo "Inga nya glosor eller meningar att committa"
           else
-            git commit -m "Genererade exempelmeningar [skip ci]"
+            if git diff --cached --name-only --diff-filter=A | grep -q '\.csv$'; then
+              msg="Hämtade glosor från glosor.eu och genererade meningar [skip ci]"
+            else
+              msg="Genererade exempelmeningar [skip ci]"
+            fi
+            git commit -m "$msg"
             git pull --rebase --autostash
             git push
           fi
