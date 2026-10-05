@@ -1,0 +1,73 @@
+name: Publicera glosappen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      regenerate:
+        description: "Gör om olåsta meningar som har ett annat tema (t.ex. efter att du ändrat interests)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write    # för att committa tillbaka genererade meningar
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # behövs för att läsa datum per glosfil ur git-historiken
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generera exempelmeningar med Gemini
+        id: sentences
+        continue-on-error: true   # om Gemini krånglar publiceras appen ändå, utan nya meningar
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/generate_sentences.py ${{ inputs.regenerate && '--regenerate' || '' }}
+
+      - name: Committa nya meningar till repot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add glosor/*.sentences.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Inga nya meningar att committa"
+          else
+            git commit -m "Genererade exempelmeningar [skip ci]"
+            git pull --rebase --autostash
+            git push
+          fi
+
+      - name: Bygg glosor/index.json
+        run: python scripts/build_index.py
+
+      - name: Samla ihop sajten
+        run: |
+          mkdir -p _site
+          cp index.html manifest.webmanifest icon.svg icon-192.png icon-512.png _site/
+          cp -r glosor _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

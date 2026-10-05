@@ -1,0 +1,18 @@
+{
+  "lists": [
+    {
+      "file": "2026-v41-djur.csv",
+      "title": "Djur på bondgården",
+      "count": 10,
+      "updated": "2026-10-05",
+      "has_sentences": false
+    },
+    {
+      "file": "2026-v40-skolan.csv",
+      "title": "Skolan",
+      "count": 12,
+      "updated": "2026-10-05",
+      "has_sentences": false
+    }
+  ]
+}

@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glosförhör</title>
+<meta name="theme-color" content="#2f6fed">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#1b2333; --muted:#5d6b82; --line:#dde3ee;
+  --brand:#2f6fed; --brand-ink:#ffffff; --brand-soft:#e6eefe;
+  --ok:#1f9d55; --ok-soft:#e3f6ea; --bad:#d64545; --bad-soft:#fde8e8;
+  --warn:#b7791f; --warn-soft:#fdf3dc;
+  --radius:16px; --shadow:0 1px 2px rgba(20,30,60,.06),0 4px 16px rgba(20,30,60,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#11151d; --card:#1a202b; --ink:#e8edf5; --muted:#9aa7bb; --line:#2b3442;
+    --brand:#6b9bff; --brand-ink:#0d1220; --brand-soft:#1f2b45;
+    --ok:#4cc483; --ok-soft:#173326; --bad:#ff7a7a; --bad-soft:#3a1d1f;
+    --warn:#e7b65a; --warn-soft:#3a2f17;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom))}
+header.top{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+header.top h1{font-size:22px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{border:0;background:var(--card);color:var(--ink);width:44px;height:44px;border-radius:12px;box-shadow:var(--shadow);font-size:20px;cursor:pointer;display:inline-grid;place-items:center;flex:none}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px;border:1px solid var(--line)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+button.btn{border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer;background:var(--brand-soft);color:var(--ink);min-height:48px}
+button.btn.primary{background:var(--brand);color:var(--brand-ink)}
+button.btn.ok{background:var(--ok);color:#fff}
+button.btn.bad{background:var(--bad);color:#fff}
+button.btn:disabled{opacity:.5;cursor:default}
+.listitem{display:flex;align-items:center;gap:12px;cursor:pointer}
+.listitem .title{font-weight:650;font-size:18px}
+.badge{font-size:13px;padding:3px 9px;border-radius:999px;background:var(--brand-soft);color:var(--ink);white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mode{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);box-shadow:var(--shadow);min-height:92px}
+.mode b{display:block;font-size:17px;margin-bottom:2px}
+.mode span{font-size:14px;color:var(--muted)}
+.mode .ico{font-size:24px;display:block;margin-bottom:6px}
+.seg{display:flex;background:var(--brand-soft);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 6px;font:inherit;font-size:15px;color:var(--ink);cursor:pointer;min-height:40px}
+.seg button.on{background:var(--card);box-shadow:var(--shadow);font-weight:650}
+table.words{width:100%;border-collapse:collapse}
+table.words td{padding:9px 4px;border-top:1px solid var(--line);vertical-align:middle}
+table.words tr:first-child td{border-top:0}
+table.words td.sp{width:44px;text-align:right}
+.speak{border:0;background:var(--brand-soft);color:var(--ink);width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:18px}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:4px 0 16px}
+.progress > i{display:block;height:100%;background:var(--brand);width:0;transition:width .25s}
+.prompt{font-size:32px;font-weight:700;text-align:center;margin:18px 0 6px;word-break:break-word}
+.hint{text-align:center;color:var(--muted);font-size:15px;margin-bottom:16px}
+input.answer{width:100%;font:inherit;font-size:22px;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+input.answer:focus{outline:none;border-color:var(--brand)}
+.feedback{margin-top:14px;padding:12px 14px;border-radius:12px;text-align:center;font-weight:600;display:none}
+.feedback.ok{display:block;background:var(--ok-soft);color:var(--ok)}
+.feedback.bad{display:block;background:var(--bad-soft);color:var(--bad)}
+.feedback.warn{display:block;background:var(--warn-soft);color:var(--warn)}
+.choices{display:grid;gap:10px;margin-top:10px}
+.choice{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:14px;font:inherit;font-size:19px;cursor:pointer;min-height:56px}
+.choice.ok{border-color:var(--ok);background:var(--ok-soft)}
+.choice.bad{border-color:var(--bad);background:var(--bad-soft)}
+.flash{perspective:1000px;height:240px;margin:10px 0 16px;cursor:pointer}
+.flash .inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.flash.flipped .inner{transform:rotateY(180deg)}
+.flash .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius);display:grid;place-items:center;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);font-size:30px;font-weight:700;padding:16px;text-align:center}
+.flash .back{transform:rotateY(180deg);background:var(--brand-soft)}
+.flash .face small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:8px}
+.memgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mem{aspect-ratio:1/1;border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:650;font-size:15px;cursor:pointer;padding:6px;word-break:break-word;line-height:1.2}
+.mem.open{background:var(--card);color:var(--ink);border:2px solid var(--brand)}
+.mem.done{background:var(--ok-soft);color:var(--ok);border:2px solid var(--ok);cursor:default}
+.mem.miss{background:var(--bad-soft);color:var(--bad);border:2px solid var(--bad)}
+@media (max-width:420px){.memgrid{gap:6px}.mem{font-size:13px;padding:4px}}
+.big{font-size:44px;font-weight:800;text-align:center;margin:8px 0}
+.center{text-align:center}
+.stack > * + *{margin-top:10px}
+.empty{padding:28px 16px;text-align:center;color:var(--muted)}
+.err{background:var(--bad-soft);color:var(--bad);padding:12px 14px;border-radius:12px}
+label.switch{display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 0}
+label.switch input{width:22px;height:22px;accent-color:var(--brand)}
+h2{font-size:18px;margin:20px 0 10px}
+.sentence{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--brand-soft);display:flex;gap:10px;align-items:flex-start;text-align:left}
+.sentence .txt{flex:1;font-size:18px}
+.sentence .txt b{color:var(--brand)}
+.sentence .sv{color:var(--muted);font-size:15px;margin-top:3px}
+.sentence .speak{background:var(--card)}
+.ex{font-size:14px;color:var(--muted);margin-top:3px}
+.ex b{color:var(--ink);font-weight:600}
+.prompt.cloze{font-size:24px;font-weight:600;line-height:1.5}
+.gap{display:inline-block;min-width:90px;border-bottom:3px solid var(--brand);margin:0 2px}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="empty">Laddar…</div>
+</div>
+
+<script>
+"use strict";
+
+/* ===================== Inställningar ===================== */
+const CONFIG = {
+  index_url: "glosor/index.json",   // genereras av scripts/build_index.py
+  list_dir: "glosor/",
+  lang_q: { code: "sv-SE", name: "Svenska" },  // kolumn 1
+  lang_a: { code: "en-GB", name: "Engelska" }, // kolumn 2
+  memory_pairs: 8,
+  storage_key: "glosforhor_v1"
+};
+
+/* ===================== Lagring (bara på enheten) ===================== */
+const store = {
+  load(){
+    try { return JSON.parse(localStorage.getItem(CONFIG.storage_key)) || {}; }
+    catch(e){ return {}; }
+  },
+  save(s){ try { localStorage.setItem(CONFIG.storage_key, JSON.stringify(s)); } catch(e){} }
+};
+const state = Object.assign({ settings:{ direction:"sv_en", auto_speak:true, strict:false }, lists:{}, history:[] }, store.load());
+state.settings = Object.assign({ direction:"sv_en", auto_speak:true, strict:false }, state.settings || {});
+function persist(){ store.save({ settings:state.settings, lists:state.lists, history:state.history.slice(-300) }); }
+
+/* ===================== Hjälpfunktioner ===================== */
+const $ = (sel, el=document) => el.querySelector(sel);
+const app = $("#app");
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function display(s){ return s.split("|")[0].trim(); }            // visa första alternativet
+function displayAll(s){ return s.split("|").map(x=>x.trim()).join(" / "); }
+
+/* ---- CSV ---- */
+function parseCsv(text){
+  text = text.replace(/^﻿/, "");
+  const lines = text.split(/\r?\n/);
+  let title = null;
+  const body = [];
+  for(const raw of lines){
+    const t = raw.trim();
+    if(!t) continue;
+    const m = t.match(/^#\s*titel\s*:\s*(.+)$/i);
+    if(m){ title = m[1].trim(); continue; }
+    if(t.startsWith("#")) continue;
+    body.push(raw);
+  }
+  if(!body.length) return { title, words:[] };
+  const first = body[0];
+  const delim = first.includes("\t") ? "\t" : (first.includes(";") ? ";" : ",");
+  const rows = body.map(l => splitCsvLine(l, delim));
+  const h = rows[0].map(c => c.toLowerCase().trim());
+  if(h.length >= 2 && /^(svenska|swedish|sv|ord|fråga)$/.test(h[0]) && /^(engelska|english|en|svar|översättning)$/.test(h[1])) rows.shift();
+  const words = rows
+    .filter(r => r.length >= 2 && r[0].trim() && r[1].trim())
+    .map((r, i) => ({ id: i, q: r[0].trim(), a: r[1].trim() }));
+  return { title, words };
+}
+function splitCsvLine(line, d){
+  const out = []; let cur = ""; let q = false;
+  for(let i=0;i<line.length;i++){
+    const c = line[i];
+    if(q){
+      if(c === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+      else if(c === '"'){ q = false; }
+      else cur += c;
+    } else if(c === '"' && cur.trim() === ""){ q = true; cur = ""; }
+    else if(c === d){ out.push(cur); cur = ""; }
+    else cur += c;
+  }
+  out.push(cur);
+  return out;
+}
+function titleFromFile(f){
+  let s = f.replace(/\.csv$/i, "")
+           .replace(/^\d{4}-\d{2}-\d{2}[-_ ]*/, "")
+           .replace(/^\d{4}-v\d{1,2}[-_ ]*/i, "")
+           .replace(/[-_]+/g, " ").trim();
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : f;
+}
+
+/* ---- Rättning ---- */
+function norm(s){
+  return s.toLowerCase()
+    .replace(/[‘’´`]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/\s+/g, " ")
+    .replace(/^[\s.,!?;:]+|[\s.,!?;:]+$/g, "")
+    .trim();
+}
+function variants(answer){
+  const out = new Set();
+  for(const alt of answer.split("|")){
+    const a = alt.trim(); if(!a) continue;
+    out.add(norm(a));
+    if(/\(.*\)/.test(a)){
+      out.add(norm(a.replace(/\([^)]*\)/g, " ")));     // utan parentesinnehåll: "(to) run" -> "run"
+      out.add(norm(a.replace(/[()]/g, "")));           // med innehåll: "to run"
+    }
+  }
+  out.delete("");
+  return [...out];
+}
+function lev(a, b){
+  const m = a.length, n = b.length;
+  if(!m) return n; if(!n) return m;
+  let prev = Array.from({length:n+1}, (_, j) => j);
+  for(let i=1;i<=m;i++){
+    const cur = [i];
+    for(let j=1;j<=n;j++){
+      cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1] + (a[i-1]===b[j-1] ? 0 : 1));
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+/* returnerar "ok" | "near" | "bad" */
+function check(input, answer){
+  const x = norm(input);
+  if(!x) return "bad";
+  const vs = variants(answer);
+  if(vs.includes(x)) return "ok";
+  for(const v of vs){
+    const d = lev(x, v);
+    const allowed = v.length >= 8 ? 2 : (v.length >= 4 ? 1 : 0);
+    if(d <= allowed) return "near";
+  }
+  return "bad";
+}
+
+/* ---- Tal ---- */
+const speech = {
+  ok: "speechSynthesis" in window && "SpeechSynthesisUtterance" in window,
+  voices: [],
+  init(){
+    if(!this.ok) return;
+    const load = () => { this.voices = speechSynthesis.getVoices(); };
+    load();
+    speechSynthesis.onvoiceschanged = load;
+  },
+  pick(lang){
+    const l = lang.toLowerCase();
+    const base = l.split("-")[0];
+    return this.voices.find(v => v.lang.toLowerCase().replace("_","-") === l)
+        || this.voices.find(v => v.lang.toLowerCase().startsWith(base));
+  },
+  say(text, lang){
+    if(!this.ok || !text) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(display(text));
+    u.lang = lang;
+    const v = this.pick(lang); if(v) u.voice = v;
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }
+};
+speech.init();
+
+/* ===================== Data ===================== */
+let catalog = null;      // [{file,title,count}]
+const cache = {};        // file -> {title, words}
+
+async function loadCatalog(){
+  if(catalog) return catalog;
+  const r = await fetch(CONFIG.index_url, { cache:"no-cache" });
+  if(!r.ok) throw new Error("Hittade inte " + CONFIG.index_url + " (HTTP " + r.status + ")");
+  const j = await r.json();
+  catalog = (j.lists || j).map(x => typeof x === "string" ? { file:x } : x);
+  catalog.forEach(x => { if(!x.title) x.title = titleFromFile(x.file); });
+  return catalog;
+}
+async function loadList(file){
+  if(cache[file]) return cache[file];
+  const r = await fetch(CONFIG.list_dir + encodeURIComponent(file), { cache:"no-cache" });
+  if(!r.ok) throw new Error("Kunde inte läsa " + file + " (HTTP " + r.status + ")");
+  const parsed = parseCsv(await r.text());
+  const meta = (catalog || []).find(c => c.file === file);
+  parsed.title = parsed.title || (meta && meta.title) || titleFromFile(file);
+  parsed.file = file;
+  await attachSentences(parsed, file);
+  cache[file] = parsed;
+  return parsed;
+}
+/* ---- Exempelmeningar (glosor/<namn>.sentences.json, genereras av Gemini i GitHub Action) ---- */
+async function attachSentences(list, file){
+  try {
+    const r = await fetch(CONFIG.list_dir + encodeURIComponent(file.replace(/\.csv$/i, ".sentences.json")), { cache:"no-cache" });
+    if(!r.ok) return;
+    const j = await r.json();
+    const map = new Map((j.items || []).map(it => [it.sv + "\u241f" + it.en, it]));
+    for(const w of list.words){
+      const it = map.get(w.q + "\u241f" + w.a);
+      if(it && it.sentence_en && it.target) w.s = { en: it.sentence_en, sv: it.sentence_sv || "", target: it.target };
+    }
+  } catch(e){ /* inga meningar – appen fungerar ändå */ }
+}
+function findTarget(sentence, target){
+  const re = new RegExp("(^|[^\\p{L}\\p{N}'])(" + target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")(?![\\p{L}\\p{N}'])", "iu");
+  const m = re.exec(sentence);
+  if(!m) return null;
+  const start = m.index + m[1].length;
+  return { start, end: start + m[2].length };
+}
+function sentenceParts(w){
+  const pos = findTarget(w.s.en, w.s.target);
+  if(!pos) return { before: w.s.en, word: "", after: "" };
+  return { before: w.s.en.slice(0, pos.start), word: w.s.en.slice(pos.start, pos.end), after: w.s.en.slice(pos.end) };
+}
+function sentenceHtml(w){
+  if(!w || !w.s) return "";
+  const p = sentenceParts(w);
+  return `<div class="sentence">
+    <div class="txt">${esc(p.before)}<b>${esc(p.word)}</b>${esc(p.after)}
+      ${w.s.sv ? `<div class="sv">${esc(w.s.sv)}</div>` : ""}</div>
+    ${speech.ok ? `<button class="speak" data-say="${esc(w.s.en)}" aria-label="Läs upp meningen">🔊</button>` : ""}
+  </div>`;
+}
+function listStats(file){
+  if(!state.lists[file]) state.lists[file] = { best:{}, words:{} };
+  return state.lists[file];
+}
+function recordWord(file, word, ok){
+  const s = listStats(file);
+  const k = word.q + "␟" + word.a;
+  const w = s.words[k] || (s.words[k] = { right:0, wrong:0 });
+  ok ? w.right++ : w.wrong++;
+  w.last = Date.now();
+}
+function recordRound(file, mode, score, total){
+  const s = listStats(file);
+  const pct = total ? Math.round(100*score/total) : 0;
+  if(!(mode in s.best) || pct > s.best[mode]) s.best[mode] = pct;
+  state.history.push({ file, mode, score, total, at: Date.now() });
+  persist();
+}
+function hardWords(list){
+  const s = listStats(list.file);
+  return list.words
+    .map(w => ({ w, st: s.words[w.q + "␟" + w.a] }))
+    .filter(x => x.st && x.st.wrong > 0)
+    .sort((a, b) => (b.st.wrong - b.st.right/2) - (a.st.wrong - a.st.right/2))
+    .map(x => x.w);
+}
+
+/* ===================== Riktning ===================== */
+/* Varje fråga får .ask / .ans / .ask_lang / .ans_lang utifrån inställd riktning */
+function orient(words){
+  const d = state.settings.direction;
+  return words.map(w => {
+    const flip = d === "en_sv" || (d === "mix" && Math.random() < .5);
+    return flip
+      ? { w, ask:w.a, ans:w.q, ask_lang:CONFIG.lang_a.code, ans_lang:CONFIG.lang_q.code, ask_name:CONFIG.lang_a.name, ans_name:CONFIG.lang_q.name }
+      : { w, ask:w.q, ans:w.a, ask_lang:CONFIG.lang_q.code, ans_lang:CONFIG.lang_a.code, ask_name:CONFIG.lang_q.name, ans_name:CONFIG.lang_a.name };
+  });
+}
+
+/* ===================== Vyer ===================== */
+const MODES = {
+  write:  { ico:"✏️", name:"Skriv svaret", desc:"Klassiskt förhör" },
+  choice: { ico:"🔘", name:"Flerval",      desc:"Välj rätt av fyra" },
+  flash:  { ico:"🃏", name:"Flashcards",   desc:"Vänd kortet" },
+  memory: { ico:"🧠", name:"Memory",       desc:"Hitta paren" },
+  listen: { ico:"🎧", name:"Hörförhör",    desc:"Lyssna och stava" },
+  cloze:  { ico:"🧩", name:"Lucktext",     desc:"Fyll i meningen" }
+};
+
+function header(title, back){
+  return `<header class="top">
+    ${back ? `<button class="iconbtn" data-go="${esc(back)}" aria-label="Tillbaka">←</button>` : ""}
+    <h1>${esc(title)}</h1>
+    ${back ? "" : `<button class="iconbtn" data-go="#/resultat" aria-label="Resultat">📊</button>`}
+  </header>`;
+}
+
+async function viewHome(){
+  app.innerHTML = header("Glosförhör") + `<div class="empty">Hämtar glosor…</div>`;
+  let lists;
+  try { lists = await loadCatalog(); }
+  catch(e){
+    app.innerHTML = header("Glosförhör") + `<div class="err">${esc(e.message)}</div>
+      <p class="muted small">Kör <code>python scripts/build_index.py</code> lokalt eller kontrollera att GitHub-workflowen har körts.</p>`;
+    return;
+  }
+  if(!lists.length){
+    app.innerHTML = header("Glosförhör") + `<div class="card empty">Inga glosor ännu. Lägg en CSV-fil i mappen <code>glosor/</code>.</div>`;
+    return;
+  }
+  const items = lists.map(l => {
+    const s = state.lists[l.file];
+    const best = s && Object.keys(s.best).length ? Math.max(...Object.values(s.best)) : null;
+    return `<div class="card listitem" data-go="#/lista/${encodeURIComponent(l.file)}" role="button" tabindex="0">
+      <div class="grow">
+        <div class="title">${esc(l.title)}</div>
+        <div class="muted small">${l.count ? l.count + " ord" : ""}${l.updated ? " · " + esc(l.updated) : ""}</div>
+      </div>
+      ${best !== null ? `<span class="badge ${best===100?"ok":""}">Bäst ${best}%</span>` : `<span class="badge">Ny</span>`}
+    </div>`;
+  }).join("");
+  app.innerHTML = header("Glosförhör") + items;
+}
+
+function dirSeg(){
+  const d = state.settings.direction;
+  const b = (v, t) => `<button data-dir="${v}" class="${d===v?"on":""}">${t}</button>`;
+  return `<div class="seg" role="group" aria-label="Riktning">
+    ${b("sv_en", "Sv → Eng")}${b("en_sv", "Eng → Sv")}${b("mix", "Blandat")}
+  </div>`;
+}
+
+async function viewList(file){
+  app.innerHTML = header("…", "#/") + `<div class="empty">Laddar…</div>`;
+  let list;
+  try { await loadCatalog().catch(()=>{}); list = await loadList(file); }
+  catch(e){ app.innerHTML = header("Fel", "#/") + `<div class="err">${esc(e.message)}</div>`; return; }
+  const s = listStats(file);
+  const hard = hardWords(list);
+  const modeBtns = Object.entries(MODES)
+    .filter(([k]) => (k !== "listen" || speech.ok) && (k !== "cloze" || list.words.some(w => w.s)))
+    .map(([k, m]) => `<button class="mode" data-go="#/ova/${k}/${encodeURIComponent(file)}">
+      <span class="ico">${m.ico}</span><b>${m.name}</b><span>${m.desc}${s.best[k]!=null ? " · bäst " + s.best[k] + "%" : ""}</span></button>`).join("");
+  const rows = list.words.map(w => `<tr>
+      <td>${esc(w.q)}</td><td><b>${esc(displayAll(w.a))}</b>${w.s ? (() => { const p = sentenceParts(w); return `<div class="ex">${esc(p.before)}<b>${esc(p.word)}</b>${esc(p.after)}</div>`; })() : ""}</td>
+      <td class="sp">${speech.ok ? `<button class="speak" data-say="${esc(w.a)}" aria-label="Läs upp">🔊</button>` : ""}</td>
+    </tr>`).join("");
+  app.innerHTML = header(list.title, "#/") + `
+    <div class="card stack">
+      <div class="muted small">Riktning</div>
+      ${dirSeg()}
+      <label class="switch"><input type="checkbox" id="auto_speak" ${state.settings.auto_speak?"checked":""} ${speech.ok?"":"disabled"}> Läs upp engelska ord automatiskt</label>
+      <label class="switch"><input type="checkbox" id="strict" ${state.settings.strict?"checked":""}> Sträng stavning (nästan rätt räknas som fel)</label>
+    </div>
+    <div class="modes">${modeBtns}</div>
+    ${hard.length ? `<div class="card row" style="margin-top:12px">
+        <div class="grow"><b>Svåra ord</b><div class="muted small">${hard.length} ord du har missat tidigare</div></div>
+        <button class="btn primary" data-go="#/ova/write/${encodeURIComponent(file)}/svara">Öva på dem</button>
+      </div>` : ""}
+    <h2>Orden (${list.words.length})</h2>
+    <div class="card"><table class="words">${rows}</table></div>`;
+  $("#auto_speak").onchange = e => { state.settings.auto_speak = e.target.checked; persist(); };
+  $("#strict").onchange = e => { state.settings.strict = e.target.checked; persist(); };
+}
+
+/* ---------- Gemensam rundlogik för write / choice / flash / listen ---------- */
+function makeRound(items){
+  return {
+    queue: shuffle(items),
+    total: items.length,
+    first_ok: 0,
+    seen: new Set(),     // ord som redan besvarats en gång (för att räkna första försöket)
+    missed: [],
+    done: 0
+  };
+}
+function progressBar(r){
+  return `<div class="progress"><i style="width:${Math.round(100*r.done/r.total)}%"></i></div>`;
+}
+function answeredFirst(r, item, ok){
+  const k = item.w.q + "␟" + item.w.a;
+  if(!r.seen.has(k)){
+    r.seen.add(k);
+    if(ok) r.first_ok++; else r.missed.push(item.w);
+  }
+}
+
+async function startMode(mode, file, sub){
+  app.innerHTML = `<div class="empty">Laddar…</div>`;
+  let list;
+  try { await loadCatalog().catch(()=>{}); list = await loadList(file); }
+  catch(e){ app.innerHTML = header("Fel", "#/") + `<div class="err">${esc(e.message)}</div>`; return; }
+  let words = list.words;
+  if(sub === "svara"){ const h = hardWords(list); if(h.length) words = h; }
+  if(mode === "cloze") words = words.filter(w => w.s);
+  if(!words.length){ app.innerHTML = header(list.title, "#/") + `<div class="card empty">${mode === "cloze" ? "Den här listan har inga exempelmeningar ännu." : "Listan är tom."}</div>`; return; }
+  const back = "#/lista/" + encodeURIComponent(file);
+  const ctx = { list, file, back, mode, words };
+  ({ write:runWrite, choice:runChoice, flash:runFlash, memory:runMemory, listen:runListen, cloze:runCloze }[mode] || runWrite)(ctx);
+}
+
+function finish(ctx, r, extra, custom){
+  recordRound(ctx.file, ctx.mode, r.first_ok, r.total);
+  const pct = Math.round(100*r.first_ok/r.total);
+  const msg = pct === 100 ? "Alla rätt direkt! 🎉" : pct >= 80 ? "Snyggt jobbat! 💪" : pct >= 50 ? "Bra kämpat, kör en gång till!" : "Öva lite till, det sitter snart!";
+  const missed = [...new Map(r.missed.map(w => [w.q+"␟"+w.a, w])).values()];
+  app.innerHTML = header(MODES[ctx.mode].name, ctx.back) + `
+    <div class="card center">
+      <div class="big">${custom ? esc(custom.big) : r.first_ok + " / " + r.total}</div>
+      <div>${custom ? esc(custom.sub) : (extra || "rätt på första försöket")}</div>
+      <p><b>${msg}</b></p>
+    </div>
+    ${missed.length ? `<h2>Att öva mer på</h2><div class="card"><table class="words">${missed.map(w => `<tr><td>${esc(w.q)}</td><td><b>${esc(displayAll(w.a))}</b></td><td class="sp">${speech.ok?`<button class="speak" data-say="${esc(w.a)}">🔊</button>`:""}</td></tr>`).join("")}</table></div>` : ""}
+    <div class="row" style="margin-top:12px">
+      <button class="btn primary grow" data-go="#/ova/${ctx.mode}/${encodeURIComponent(ctx.file)}" data-force="1">Kör igen</button>
+      ${missed.length && ctx.mode !== "memory" ? `<button class="btn grow" data-go="#/ova/write/${encodeURIComponent(ctx.file)}/svara" data-force="1">Öva svåra ord</button>` : ""}
+      <button class="btn grow" data-go="${ctx.back}">Till listan</button>
+    </div>`;
+}
+
+function maybeSpeakEnglish(text, lang){
+  if(state.settings.auto_speak && lang === CONFIG.lang_a.code) speech.say(text, lang);
+}
+
+/* ---------- Skriv svaret ---------- */
+function runWrite(ctx){
+  const r = makeRound(orient(ctx.words));
+  const next = () => {
+    if(!r.queue.length) return finish(ctx, r);
+    const it = r.queue[0];
+    app.innerHTML = header(MODES.write.name, ctx.back) + progressBar(r) + `
+      <div class="card">
+        <div class="prompt">${esc(display(it.ask))}
+          ${speech.ok && it.ask_lang === CONFIG.lang_a.code ? `<button class="speak" data-say="${esc(it.ask)}" data-lang="${it.ask_lang}">🔊</button>` : ""}</div>
+        <div class="hint">Skriv på ${it.ans_name.toLowerCase()}</div>
+        <form id="f" autocomplete="off">
+          <input class="answer" id="in" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Ditt svar">
+          <div class="row" style="margin-top:12px">
+            <button type="button" class="btn grow" id="skip">Visa svar</button>
+            <button class="btn primary grow" id="go">Rätta</button>
+          </div>
+        </form>
+        <div class="feedback" id="fb"></div>
+      </div>
+      <div class="muted small center">${r.queue.length} kvar i rundan</div>`;
+    const inp = $("#in"); inp.focus();
+    maybeSpeakEnglish(it.ask, it.ask_lang);
+    let answered = false;
+    const resolve = (res, typed) => {
+      answered = true;
+      const fb = $("#fb");
+      const correct = displayAll(it.ans);
+      let ok = res === "ok" || (res === "near" && !state.settings.strict);
+      if(res === "ok"){ fb.className = "feedback ok"; fb.textContent = "Rätt!" + (it.ans.includes("|") ? " (" + correct + ")" : ""); }
+      else if(res === "near"){ fb.className = "feedback warn"; fb.innerHTML = "Nästan! Rätt stavning: <b>" + esc(correct) + "</b>"; }
+      else { fb.className = "feedback bad"; fb.innerHTML = (typed ? "Inte riktigt. " : "") + "Rätt svar: <b>" + esc(correct) + "</b>"; }
+      recordWord(ctx.file, it.w, res === "ok");
+      answeredFirst(r, it, res === "ok");
+      r.queue.shift();
+      if(ok && res === "ok"){ r.done++; }
+      else if(ok){ r.done++; }                       // nästan rätt (inte strikt): klart men räknas inte som första-försöket-rätt
+      else { r.queue.push(it); }                     // fel: kommer tillbaka senare i rundan
+      if(it.ans_lang === CONFIG.lang_a.code && state.settings.auto_speak) speech.say(it.ans, it.ans_lang);
+      fb.insertAdjacentHTML("afterend", sentenceHtml(it.w));
+      inp.disabled = true;
+      $("#go").textContent = "Nästa →"; $("#skip").classList.add("hidden");
+      $("#go").focus();
+    };
+    $("#f").onsubmit = e => {
+      e.preventDefault();
+      if(answered) return next();
+      if(!inp.value.trim()){ inp.focus(); return; }
+      resolve(check(inp.value, it.ans), inp.value);
+    };
+    $("#skip").onclick = () => { if(!answered) resolve("bad", false); };
+  };
+  next();
+}
+
+/* ---------- Hörförhör ---------- */
+function runListen(ctx){
+  // Hör alltid det engelska ordet och skriv det på engelska (stavning)
+  const items = ctx.words.map(w => ({ w, ask:w.a, ans:w.a, ask_lang:CONFIG.lang_a.code, ans_lang:CONFIG.lang_a.code, ans_name:CONFIG.lang_a.name }));
+  const r = makeRound(items);
+  const next = () => {
+    if(!r.queue.length) return finish(ctx, r);
+    const it = r.queue[0];
+    app.innerHTML = header(MODES.listen.name, ctx.back) + progressBar(r) + `
+      <div class="card">
+        <div class="center" style="margin:14px 0">
+          <button class="btn primary" id="play" style="font-size:22px;padding:18px 28px">🔊 Spela upp</button>
+        </div>
+        <div class="hint">Skriv ordet du hör på engelska <span id="tip" class="hidden">· betyder: <b>${esc(it.w.q)}</b></span></div>
+        <form id="f" autocomplete="off">
+          <input class="answer" id="in" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Ditt svar">
+          <div class="row" style="margin-top:12px">
+            <button type="button" class="btn grow" id="help">Ledtråd</button>
+            <button class="btn primary grow" id="go">Rätta</button>
+          </div>
+        </form>
+        <div class="feedback" id="fb"></div>
+      </div>`;
+    const play = () => speech.say(it.ans, CONFIG.lang_a.code);
+    $("#play").onclick = () => { play(); $("#in").focus(); };
+    $("#help").onclick = () => $("#tip").classList.remove("hidden");
+    setTimeout(play, 250);
+    const inp = $("#in"); inp.focus();
+    let answered = false;
+    $("#f").onsubmit = e => {
+      e.preventDefault();
+      if(answered) return next();
+      if(!inp.value.trim()){ play(); inp.focus(); return; }
+      answered = true;
+      const res = check(inp.value, it.ans);
+      const fb = $("#fb"); const correct = displayAll(it.ans);
+      const ok = res === "ok" || (res === "near" && !state.settings.strict);
+      if(res === "ok"){ fb.className = "feedback ok"; fb.innerHTML = "Rätt! <b>" + esc(correct) + "</b> = " + esc(it.w.q); }
+      else if(res === "near"){ fb.className = "feedback warn"; fb.innerHTML = "Nästan! Rätt stavning: <b>" + esc(correct) + "</b>"; }
+      else { fb.className = "feedback bad"; fb.innerHTML = "Rätt svar: <b>" + esc(correct) + "</b> (" + esc(it.w.q) + ")"; }
+      recordWord(ctx.file, it.w, res === "ok");
+      answeredFirst(r, it, res === "ok");
+      r.queue.shift();
+      if(ok) r.done++; else r.queue.push(it);
+      fb.insertAdjacentHTML("afterend", sentenceHtml(it.w));
+      inp.disabled = true; $("#go").textContent = "Nästa →"; $("#help").classList.add("hidden"); $("#go").focus();
+    };
+  };
+  next();
+}
+
+/* ---------- Flerval ---------- */
+function runChoice(ctx){
+  const r = makeRound(orient(ctx.words));
+  const pool = ctx.list.words;
+  const next = () => {
+    if(!r.queue.length) return finish(ctx, r);
+    const it = r.queue[0];
+    const ansIsA = it.ans_lang === CONFIG.lang_a.code;
+    const others = shuffle(pool.filter(w => w !== it.w)).slice(0, 3).map(w => ansIsA ? w.a : w.q);
+    const opts = shuffle([it.ans, ...others]);
+    app.innerHTML = header(MODES.choice.name, ctx.back) + progressBar(r) + `
+      <div class="card">
+        <div class="prompt">${esc(display(it.ask))}
+          ${speech.ok && it.ask_lang === CONFIG.lang_a.code ? `<button class="speak" data-say="${esc(it.ask)}">🔊</button>` : ""}</div>
+        <div class="hint">Välj rätt ord på ${it.ans_name.toLowerCase()}</div>
+        <div class="choices">${opts.map((o, i) => `<button class="choice" data-i="${i}">${esc(display(o))}</button>`).join("")}</div>
+        <div class="row" style="margin-top:12px"><button class="btn primary grow hidden" id="nx">Nästa →</button></div>
+      </div>`;
+    maybeSpeakEnglish(it.ask, it.ask_lang);
+    let answered = false;
+    app.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+      if(answered) return; answered = true;
+      const pick = opts[+b.dataset.i];
+      const ok = pick === it.ans;
+      app.querySelectorAll(".choice").forEach(x => { if(opts[+x.dataset.i] === it.ans) x.classList.add("ok"); });
+      if(!ok) b.classList.add("bad");
+      recordWord(ctx.file, it.w, ok);
+      answeredFirst(r, it, ok);
+      r.queue.shift();
+      if(ok) r.done++; else r.queue.push(it);
+      if(ansIsA && state.settings.auto_speak) speech.say(it.ans, it.ans_lang);
+      const nx = $("#nx"); nx.classList.remove("hidden"); nx.focus();
+      nx.onclick = next;
+      if(it.w.s) nx.parentElement.insertAdjacentHTML("beforebegin", sentenceHtml(it.w));
+      else if(ok) setTimeout(() => { if(document.body.contains(nx)) next(); }, 900);  // auto-nästa bara när det inte finns en mening att läsa
+    });
+  };
+  next();
+}
+
+/* ---------- Flashcards ---------- */
+function runFlash(ctx){
+  const r = makeRound(orient(ctx.words));
+  const next = () => {
+    if(!r.queue.length) return finish(ctx, r, "kunde direkt");
+    const it = r.queue[0];
+    app.innerHTML = header(MODES.flash.name, ctx.back) + progressBar(r) + `
+      <div class="flash" id="card" role="button" tabindex="0" aria-label="Vänd kortet">
+        <div class="inner">
+          <div class="face front"><div><small>${it.ask_name}</small>${esc(displayAll(it.ask))}</div></div>
+          <div class="face back"><div><small>${it.ans_name}</small>${esc(displayAll(it.ans))}</div></div>
+        </div>
+      </div>
+      <div class="hint" id="h">Tryck på kortet för att vända det</div>
+      <div class="hidden" id="ex" style="margin-bottom:12px">${sentenceHtml(it.w)}</div>
+      <div class="row hidden" id="btns">
+        <button class="btn bad grow" id="no">Kunde inte</button>
+        <button class="btn ok grow" id="yes">Kunde!</button>
+      </div>
+      <div class="muted small center" style="margin-top:10px">${r.queue.length} kort kvar</div>`;
+    maybeSpeakEnglish(it.ask, it.ask_lang);
+    const card = $("#card");
+    const flip = () => {
+      card.classList.toggle("flipped");
+      if(card.classList.contains("flipped")){
+        $("#btns").classList.remove("hidden"); $("#h").classList.add("hidden"); $("#ex").classList.remove("hidden");
+        maybeSpeakEnglish(it.ans, it.ans_lang);
+      }
+    };
+    card.onclick = flip;
+    card.onkeydown = e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); flip(); } };
+    const mark = ok => {
+      recordWord(ctx.file, it.w, ok);
+      answeredFirst(r, it, ok);
+      r.queue.shift();
+      if(ok) r.done++; else r.queue.push(it);
+      next();
+    };
+    $("#yes").onclick = () => mark(true);
+    $("#no").onclick = () => mark(false);
+  };
+  next();
+}
+
+/* ---------- Lucktext ---------- */
+function runCloze(ctx){
+  const items = ctx.words.map(w => ({ w, ans:w.s.target }));
+  const r = makeRound(items);
+  const next = () => {
+    if(!r.queue.length) return finish(ctx, r);
+    const it = r.queue[0];
+    const p = sentenceParts(it.w);
+    app.innerHTML = header(MODES.cloze.name, ctx.back) + progressBar(r) + `
+      <div class="card">
+        <div class="prompt cloze">${esc(p.before)}<span class="gap">&nbsp;</span>${esc(p.after)}</div>
+        <div class="hint">Ordet som saknas betyder <b>${esc(displayAll(it.w.q))}</b></div>
+        <form id="f" autocomplete="off">
+          <input class="answer" id="in" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Ordet som saknas">
+          <div class="row" style="margin-top:12px">
+            <button type="button" class="btn grow" id="skip">Visa svar</button>
+            <button class="btn primary grow" id="go">Rätta</button>
+          </div>
+        </form>
+        <div class="feedback" id="fb"></div>
+      </div>
+      <div class="muted small center">${r.queue.length} kvar i rundan</div>`;
+    const inp = $("#in"); inp.focus();
+    let answered = false;
+    const resolve = (typed) => {
+      answered = true;
+      const target = it.w.s.target;
+      let res = typed ? check(typed, target) : "bad";
+      let form_hint = false;
+      if(res !== "ok" && typed && check(typed, it.w.a) === "ok"){ res = "near"; form_hint = true; }  // rätt ord men fel form
+      const ok = res === "ok" || (res === "near" && !state.settings.strict);
+      const fb = $("#fb");
+      if(res === "ok"){ fb.className = "feedback ok"; fb.textContent = "Rätt!"; }
+      else if(form_hint){ fb.className = "feedback warn"; fb.innerHTML = "Rätt ord! Men i meningen ska det stå <b>" + esc(target) + "</b>"; }
+      else if(res === "near"){ fb.className = "feedback warn"; fb.innerHTML = "Nästan! Rätt stavning: <b>" + esc(target) + "</b>"; }
+      else { fb.className = "feedback bad"; fb.innerHTML = (typed ? "Inte riktigt. " : "") + "Rätt svar: <b>" + esc(target) + "</b>"; }
+      fb.insertAdjacentHTML("afterend", sentenceHtml(it.w));
+      recordWord(ctx.file, it.w, res === "ok");
+      answeredFirst(r, it, res === "ok");
+      r.queue.shift();
+      if(ok) r.done++; else r.queue.push(it);
+      if(state.settings.auto_speak) speech.say(it.w.s.en, CONFIG.lang_a.code);
+      inp.disabled = true;
+      $("#go").textContent = "Nästa →"; $("#skip").classList.add("hidden");
+      $("#go").focus();
+    };
+    $("#f").onsubmit = e => {
+      e.preventDefault();
+      if(answered) return next();
+      if(!inp.value.trim()){ inp.focus(); return; }
+      resolve(inp.value);
+    };
+    $("#skip").onclick = () => { if(!answered) resolve(""); };
+  };
+  next();
+}
+
+/* ---------- Memory ---------- */
+function runMemory(ctx){
+  const chosen = shuffle(ctx.words).slice(0, CONFIG.memory_pairs);
+  const cards = shuffle(chosen.flatMap((w, i) => [
+    { pair:i, text:display(w.q), lang:CONFIG.lang_q.code },
+    { pair:i, text:display(w.a), lang:CONFIG.lang_a.code }
+  ]));
+  let open = [], found = 0, tries = 0, lock = false;
+  app.innerHTML = header(MODES.memory.name, ctx.back) + `
+    <div class="row" style="margin-bottom:12px"><div class="grow muted">Para ihop svenska och engelska ord</div><span class="badge" id="tries">0 försök</span></div>
+    <div class="memgrid">${cards.map((c, i) => `<button class="mem" data-i="${i}" aria-label="Kort">?</button>`).join("")}</div>`;
+  const els = [...app.querySelectorAll(".mem")];
+  els.forEach(el => el.onclick = () => {
+    const i = +el.dataset.i, c = cards[i];
+    if(lock || el.classList.contains("done") || open.includes(i)) return;
+    el.classList.add("open"); el.textContent = c.text;
+    if(c.lang === CONFIG.lang_a.code && state.settings.auto_speak) speech.say(c.text, c.lang);
+    open.push(i);
+    if(open.length < 2) return;
+    tries++; $("#tries").textContent = tries + " försök";
+    const [a, b] = open;
+    if(cards[a].pair === cards[b].pair){
+      [a, b].forEach(k => { els[k].classList.remove("open"); els[k].classList.add("done"); });
+      found++; open = [];
+      if(found === chosen.length){
+        // Memory: poäng = antal par / antal försök (8 par på 8 försök = 100 %). Missar i memory påverkar inte "svåra ord".
+        const r = { first_ok: chosen.length, total: tries, missed: [] };
+        setTimeout(() => finish(ctx, r, null, { big: `${tries} försök`, sub: `för att hitta alla ${chosen.length} paren (bästa möjliga: ${chosen.length})` }), 600);
+      }
+    } else {
+      lock = true;
+      [a, b].forEach(k => els[k].classList.add("miss"));
+      setTimeout(() => {
+        [a, b].forEach(k => { els[k].classList.remove("open", "miss"); els[k].textContent = "?"; });
+        open = []; lock = false;
+      }, 1100);
+    }
+  });
+}
+
+/* ---------- Resultat ---------- */
+async function viewResults(){
+  await loadCatalog().catch(() => {});
+  const titleOf = f => ((catalog || []).find(c => c.file === f) || {}).title || titleFromFile(f);
+  const fmt = t => new Date(t).toLocaleString("sv-SE", { dateStyle:"short", timeStyle:"short" });
+  const hist = state.history.slice().reverse().slice(0, 50);
+  const total = state.history.length;
+  const week = state.history.filter(h => Date.now() - h.at < 7*864e5).length;
+  app.innerHTML = header("Resultat", "#/") + `
+    <div class="row" style="gap:12px;align-items:stretch">
+      <div class="card grow center"><div class="big">${week}</div><div class="muted small">rundor senaste 7 dagarna</div></div>
+      <div class="card grow center"><div class="big">${total}</div><div class="muted small">rundor totalt</div></div>
+    </div>
+    <h2>Senaste rundorna</h2>
+    ${hist.length ? `<div class="card"><table class="words">${hist.map(h => `<tr>
+      <td>${esc(titleOf(h.file))}<div class="muted small">${MODES[h.mode] ? MODES[h.mode].name : h.mode} · ${fmt(h.at)}</div></td>
+      <td style="text-align:right"><span class="badge ${h.score===h.total?"ok":""}">${h.mode==="memory" ? h.total + " försök" : h.score + "/" + h.total}</span></td></tr>`).join("")}</table></div>`
+      : `<div class="card empty">Inga rundor ännu.</div>`}
+    <p class="muted small">Resultaten sparas bara på den här enheten.</p>
+    ${total ? `<button class="btn" id="reset">Nollställ resultat</button>` : ""}`;
+  const rb = $("#reset");
+  if(rb) rb.onclick = () => {
+    if(rb.dataset.sure){ state.lists = {}; state.history = []; persist(); viewResults(); }
+    else { rb.dataset.sure = "1"; rb.textContent = "Tryck igen för att nollställa"; rb.classList.add("bad"); }
+  };
+}
+
+/* ===================== Router & globala klick ===================== */
+async function route(){
+  speech.ok && speechSynthesis.cancel();
+  const h = location.hash || "#/";
+  const p = h.slice(2).split("/").map(decodeURIComponent);
+  window.scrollTo(0, 0);
+  if(p[0] === "lista" && p[1]) return viewList(p[1]);
+  if(p[0] === "ova" && p[1] && p[2]) return startMode(p[1], p[2], p[3]);
+  if(p[0] === "resultat") return viewResults();
+  return viewHome();
+}
+window.addEventListener("hashchange", route);
+document.addEventListener("click", e => {
+  const say = e.target.closest("[data-say]");
+  if(say){ e.stopPropagation(); speech.say(say.dataset.say, say.dataset.lang || CONFIG.lang_a.code); return; }
+  const dir = e.target.closest("[data-dir]");
+  if(dir){
+    state.settings.direction = dir.dataset.dir; persist();
+    dir.parentElement.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === dir));
+    return;
+  }
+  const go = e.target.closest("[data-go]");
+  if(go){
+    const target = go.dataset.go;
+    if(location.hash === target && go.dataset.force) route(); else location.hash = target;
+  }
+});
+document.addEventListener("keydown", e => {
+  if(e.key === "Enter"){ const li = e.target.closest && e.target.closest(".listitem[data-go]"); if(li) location.hash = li.dataset.go; }
+});
+route();
+</script>
+</body>
+</html>
