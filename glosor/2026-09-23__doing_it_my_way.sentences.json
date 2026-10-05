@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "sv": "serier",
+      "en": "comics",
+      "sentence_en": "I love reading fun comics about brave heroes.",
+      "sentence_sv": "Jag älskar att läsa roliga serier om modiga hjältar.",
+      "target": "comics",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "längre",
+      "en": "further",
+      "sentence_en": "She wants to walk further into the forest.",
+      "sentence_sv": "Hon vill gå längre in i skogen.",
+      "target": "further",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "fans skriver nya texter",
+      "en": "fan fiction",
+      "sentence_en": "He writes cool fan fiction about his favorite magicians.",
+      "sentence_sv": "Han skriver häftig fan fiction om sina favorittrollkarlar.",
+      "target": "fan fiction",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "tillåta",
+      "en": "allow",
+      "sentence_en": "Do your parents allow you to draw on walls?",
+      "sentence_sv": "Tillåter dina föräldrar dig att rita på väggar?",
+      "target": "allow",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "utveckla",
+      "en": "develop",
+      "sentence_en": "You can develop your drawing skills every single day.",
+      "sentence_sv": "Du kan utveckla dina ritkunskaper varje dag.",
+      "target": "develop",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "välkänd",
+      "en": "well know",
+      "sentence_en": "She is a well known artist in our town.",
+      "sentence_sv": "Hon är en välkänd konstnär i vår stad.",
+      "target": "well known",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "speciellt",
+      "en": "particularly",
+      "sentence_en": "I like reading books, particularly stories about dragons.",
+      "sentence_sv": "Jag gillar att läsa böcker, speciellt berättelser om drakar.",
+      "target": "particularly",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "roman",
+      "en": "novel",
+      "sentence_en": "He reads a thick fantasy novel in his room.",
+      "sentence_sv": "Han läser en tjock fantasyroman i sitt rum.",
+      "target": "novel",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "våga",
+      "en": "dare",
+      "sentence_en": "Do you dare to jump over the big log?",
+      "sentence_sv": "Vågar du hoppa över den stora stocken?",
+      "target": "dare",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "lägga i olika lager|lager",
+      "en": "layer",
+      "sentence_en": "Add another layer of blue paint on your shield.",
+      "sentence_sv": "Lägg till ett till lager blå färg på din sköld.",
+      "target": "layer",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "band",
+      "en": "tape",
+      "sentence_en": "Use green tape to fix your cardboard sword.",
+      "sentence_sv": "Använd grön tejp för att laga ditt svärd av papp.",
+      "target": "tape",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "den/det billigaste",
+      "en": "the cheapest",
+      "sentence_en": "This is the cheapest notebook for your drawings.",
+      "sentence_sv": "Det här är det billigaste anteckningsblocket för dina teckningar.",
+      "target": "the cheapest",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "helt",
+      "en": "completely",
+      "sentence_en": "Her costume is completely finished for the big party.",
+      "sentence_sv": "Hennes dräkt är helt färdig för den stora festen.",
+      "target": "completely",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "original|ursprunglig",
+      "en": "original",
+      "sentence_en": "This drawing is my original work from last year.",
+      "sentence_sv": "Den här teckningen är mitt originalarbete från förra året.",
+      "target": "original",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "dela",
+      "en": "share",
+      "sentence_en": "We share our painted miniatures with our friends.",
+      "sentence_sv": "Vi delar våra målade miniatyrer med våra vänner.",
+      "target": "share",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "kunskap|förmåga",
+      "en": "skill",
+      "sentence_en": "Painting tiny models takes a lot of skill.",
+      "sentence_sv": "Att måla små modeller kräver mycket skicklighet.",
+      "target": "skill",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "slag",
+      "en": "battle",
+      "sentence_en": "The knights fight a big battle in the field.",
+      "sentence_sv": "Riddarna kämpar i ett stort slag på fältet.",
+      "target": "battle",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "återuppförande|lajv",
+      "en": "re-enactment",
+      "sentence_en": "We wear old clothes for our history re-enactment.",
+      "sentence_sv": "Vi har på oss gamla kläder för vårt historiska återuppförande.",
+      "target": "re-enactment",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "inbördeskrig",
+      "en": "civil war",
+      "sentence_en": "They read about a sad civil war in history.",
+      "sentence_sv": "De läser om ett sorgligt inbördeskrig i historien.",
+      "target": "civil war",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    },
+    {
+      "sv": "bronsåldern",
+      "en": "the Bronze age",
+      "sentence_en": "People made nice jewelry in the Bronze Age.",
+      "sentence_sv": "Människor gjorde fina smycken under bronsåldern.",
+      "target": "Bronze Age",
+      "theme": "kreativa fritidsintressen som serier, fan fiction och historiska återuppföranden",
+      "theme_auto": false,
+      "locked": false
+    }
+  ]
+}
