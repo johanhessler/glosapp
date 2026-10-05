@@ -5,7 +5,28 @@
       "title": "Forever Young",
       "count": 18,
       "updated": "2026-10-05",
-      "has_sentences": false
+      "has_sentences": true
+    },
+    {
+      "file": "2026-09-30__my_hobby_my_job.csv",
+      "title": "My Hobby – My Job",
+      "count": 20,
+      "updated": "2026-10-05",
+      "has_sentences": true
+    },
+    {
+      "file": "2026-09-23__doing_it_my_way.csv",
+      "title": "Doing It My Way",
+      "count": 20,
+      "updated": "2026-10-05",
+      "has_sentences": true
+    },
+    {
+      "file": "2026-09-16__that_sounds_brilliant.csv",
+      "title": "That Sounds Brilliant!",
+      "count": 20,
+      "updated": "2026-10-05",
+      "has_sentences": true
     }
   ]
 }

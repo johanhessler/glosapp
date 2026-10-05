@@ -86,7 +86,7 @@ läsa;(to) read
 
 | Regel | Förklaring |
 |---|---|
-| Filnamn | `ÅÅÅÅ-MM-DD__namn.csv`, t.ex. `2026-10-07__forever_young.csv`. `ÅÅÅÅ-vVV-namn.csv` fungerar också, men blanda inte formaten: listorna sorteras på filnamnet, senaste först, och då hamnar v-filerna alltid överst. |
+| Filnamn | `ÅÅÅÅ-MM-DD__namn.csv`, t.ex. `2026-10-07__forever_young.csv`. Datumet är förhörsdagen och visas på startsidan som "förhör ons 7 okt" (eller "i dag"/"i morgon"). `ÅÅÅÅ-vVV-namn.csv` fungerar också, men blanda inte formaten: listorna sorteras på filnamnet, senaste först, och då hamnar v-filerna alltid överst. |
 | `# titel: …` | Valfri. Om raden saknas skapas titeln från filnamnet (`2026-10-07__forever_young.csv` blir "Forever young"). |
 | `# tema: …` | Valfri. Tema för exempelmeningarna i den här listan, t.ex. `# tema: äldreboende och vardag`. Utan raden väljer Gemini ett tema. |
 | `# källa: …` | Skrivs av hämtningen från glosor.eu (övningens adress). Används för att inte hämta samma övning två gånger. |

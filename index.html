@@ -404,12 +404,31 @@ async function viewHome(){
     return `<div class="card listitem" data-go="#/lista/${encodeURIComponent(l.file)}" role="button" tabindex="0">
       <div class="grow">
         <div class="title">${esc(l.title)}</div>
-        <div class="muted small">${l.count ? l.count + " ord" : ""}${l.updated ? " · " + esc(l.updated) : ""}</div>
+        <div class="muted small">${[l.count ? l.count + " ord" : "", dateLabel(l)].filter(Boolean).map(esc).join(" · ")}</div>
       </div>
       ${best !== null ? `<span class="badge ${best===100?"ok":""}">Bäst ${best}%</span>` : `<span class="badge">Ny</span>`}
     </div>`;
   }).join("");
   app.innerHTML = header("Glosförhör") + items;
+}
+
+// Förhörsdatum ur filnamnet ("2026-10-07__…" → "förhör ons 7 okt", "2026-v42-…" → "vecka 42"),
+// annars datum för senaste ändring ur index.json
+function dateLabel(l){
+  const m = l.file.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m){
+    const d = new Date(+m[1], +m[2] - 1, +m[3]);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const days = Math.round((d - today) / 86400000);
+    if(days === 0) return "förhör i dag";
+    if(days === 1) return "förhör i morgon";
+    const wd = ["sön","mån","tis","ons","tors","fre","lör"][d.getDay()];
+    const mon = ["jan","feb","mars","apr","maj","juni","juli","aug","sep","okt","nov","dec"][d.getMonth()];
+    return `förhör ${wd} ${d.getDate()} ${mon}` + (d.getFullYear() !== today.getFullYear() ? " " + d.getFullYear() : "");
+  }
+  const w = l.file.match(/^\d{4}-v(\d{1,2})/i);
+  if(w) return "vecka " + (+w[1]);
+  return l.updated || "";
 }
 
 function dirSeg(){
