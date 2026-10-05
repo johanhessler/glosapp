@@ -16,9 +16,10 @@ flowchart LR
 
     subgraph gh["GitHub-repo"]
         repo[("main-branch<br/>index.html<br/>glosor/*.csv")]
-        fetch["GitHub Action steg 1 (dagligen)<br/>fetch_glosor.py"]
-        gen["GitHub Action steg 2<br/>generate_sentences.py"]
-        action["GitHub Action steg 3<br/>build_index.py → glosor/index.json"]
+        fetch["Action steg 1<br/>fetch_glosor.py"]
+        gen["Action steg 2<br/>generate_sentences.py"]
+        commit["Action steg 3<br/>commit nya CSV + meningar"]
+        action["Action steg 4<br/>build_index.py → glosor/index.json"]
         pages["GitHub Pages<br/>johanhessler.github.io/glosapp"]
     end
 
@@ -31,13 +32,14 @@ flowchart LR
     end
 
     csv -.->|git push| repo
+    repo -->|push eller dagligen 16:00| fetch
     glosoreu -->|nya övningar| fetch
-    fetch -->|commit nya *.csv| repo
     fetch --> gen
-    gen -->|nya ord + tema/titel| gemini
+    gen -->|nya ord + titel/tema| gemini
     gemini -->|meningar + tema som JSON| gen
-    gen -->|commit *.sentences.json| repo
-    gen --> action --> pages
+    gen --> commit
+    commit -->|"[skip ci]"| repo
+    commit --> action --> pages
     pages -->|index.json + CSV + meningar| app
     app <--> ls
     app --> tts
@@ -141,14 +143,26 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 - **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden väljer Gemini ett nytt.
 - **Få nya varianter av alla meningar:** *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar om, även de som redan har rätt tema.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
-- Gratisnivån svarar ofta "hög belastning" (503) eller "för många anrop" (429). Gratisnivån tillåter bara 20 anrop per dag för Flash-modellerna (500 för lite-modellerna), och även misslyckade anrop räknas. Skriptet skickar därför en hel lista per anrop, gör högst 3 försök med `model` och sedan upp till 5 med `fallback_model`, med 15 s till 2 min väntan emellan. Mellan anrop väntar det 13 s (Flash tillåter 5 anrop per minut). Aktuell förbrukning syns i [AI Studio](https://aistudio.google.com/rate-limit). Det som lyckas sparas. Ord som fortfarande saknar mening tas med vid nästa körning, senast vid den dagliga körningen.
-- Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions.
+- **Gratisnivåns gränser:** Flash-modellerna tillåter 5 anrop per minut och 20 per dag, lite-modellerna 15 per minut och 500 per dag. Även misslyckade anrop räknas. Aktuell förbrukning syns i [AI Studio](https://aistudio.google.com/rate-limit). Ett nytt kapitel i veckan kostar normalt ett anrop.
+- **När Gemini är överbelastad** (503) eller säger "för många anrop" (429): skriptet skickar en hel lista per anrop, gör högst 3 försök med `model` och sedan upp till 5 med `fallback_model`, med 15 s till 2 min väntan emellan och 13 s mellan anrop. Är dagskvoten slut byter det direkt till reserven. Ord som ändå saknar mening tas med vid nästa körning, senast vid den dagliga körningen.
+- Om Gemini krånglar helt (fel nyckel, båda kvoterna slut) publiceras appen ändå. Steget markeras med en varning i Actions.
+
+## Workflowen: `.github/workflows/pages.yml`
+
+Körs vid varje push till `main`, varje dag kl. 16 (svensk sommartid, 15 vintertid) och manuellt via *Actions* → *Publicera glosappen* → *Run workflow*. Stegen:
+
+1. **Hämta** nya övningar från glosor.eu (`fetch_glosor.py`).
+2. **Generera** meningar för ord som saknar mening (`generate_sentences.py`).
+3. **Committa** nya CSV- och meningsfiler till `main` med `[skip ci]`, så att det inte startar en ny körning.
+4. **Bygga** `glosor/index.json` och **publicera** på GitHub Pages.
+
+Steg 1 och 2 har `continue-on-error`, så appen publiceras även om glosor.eu eller Gemini krånglar. Workflowen utgår alltid från senaste `main`, även när den har stått i kö bakom en annan körning. Om `main` ändras under körningen släpper botten sin commit, publicerar senaste `main` och skriver en varning. Det som saknas tas då vid nästa körning.
 
 ## Automatisk hämtning från glosor.eu
 
-Workflowen körs varje dag kl. 16 (svensk sommartid, 15 vintertid). Då loggar `scripts/fetch_glosor.py` in med klassens konto, läser listan över övningar och skriver en CSV för varje övning som inte redan finns, t.ex. `2026-10-07__forever_young.csv` med titeln "Forever Young". Gemini väljer tema och skriver meningar, botten committar allt och appen publiceras. Du behöver alltså inte göra något, men kör `git pull` innan du ändrar något lokalt.
+Varje dag kl. 16 (svensk sommartid, 15 vintertid) körs workflowen. Då loggar `scripts/fetch_glosor.py` in med klassens konto, läser listan över övningar och skriver en CSV för varje övning som inte redan finns, t.ex. `2026-10-07__forever_young.csv` med titeln "Forever Young". Gemini väljer tema och skriver meningar, botten committar allt och appen publiceras. Du behöver alltså inte göra något, men kör `git pull` innan du ändrar något lokalt.
 
-- **Kör direkt** i stället för att vänta: *Actions* → *Publicera glosappen* → *Run workflow*.
+- **Kör direkt** i stället för att vänta: *Run workflow* (se ovan).
 - **Ändra tiden:** `cron` i `.github/workflows/pages.yml` (UTC).
 - **Rätta en hämtad lista** (t.ex. ett stavfel från läraren): redigera CSV-filen och pusha. Filen hämtas inte igen eftersom raden `# källa:` finns kvar.
 - **Lokalt:** `python scripts/fetch_glosor.py --dry-run` visar vad som skulle hämtas. Inloggningen läses då från `local/.env` (git-ignorerad):
@@ -165,9 +179,9 @@ Repot [johanhessler/glosapp](https://github.com/johanhessler/glosapp) är redan 
 1. **Publikt repo** på GitHub. Det krävs för gratis GitHub Pages, så glosorna är offentliga, men de innehåller inget personligt. `CLAUDE.md` och `.claude/` är git-ignorerade och hamnar aldrig i repot.
 2. **Pages:** *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
 3. **Gemini-nyckel:** logga in på [aistudio.google.com](https://aistudio.google.com) → **Get API key** → *Create API key*. Gratisnivån kräver inget betalkort. Enligt villkoren kan Google använda innehållet (här bara glosor) för att förbättra sina produkter.
-4. **Secrets:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**: `GEMINI_API_KEY`, `GLOSOR_EU_USER` och `GLOSOR_EU_PASS`. De två sista kan också sättas från `local/.env` med `gh secret set -f local/.env`.
+4. **Secrets:** *Settings* → *Secrets and variables* → *Actions* → **New repository secret**: `GEMINI_API_KEY`, `GLOSOR_EU_USER` och `GLOSOR_EU_PASS`. Har du alla tre i `local/.env` kan de sättas på en gång med `gh secret set -f local/.env` (varje rad i filen blir en secret).
 5. **Skrivrätt för workflowen** (så att den kan committa glosor och meningar): *Settings* → *Actions* → *General* → *Workflow permissions* → **Read and write permissions**.
-6. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter.
+6. **Kör workflowen:** *Actions* → *Publicera glosappen* → *Run workflow*. Den tar 1–2 minuter, längre om Gemini är överbelastad.
 7. **Hemskärmen** på sonens iPhone: öppna adressen i Safari → Dela → *Lägg till på hemskärmen*. Då öppnas den i helskärm som en vanlig app. På Chromebook: öppna adressen i Chrome och installera den som app via menyn ⋮ (exakt menytext varierar mellan Chrome-versioner).
 
 ## Lägga till en egen lista
@@ -182,16 +196,16 @@ git commit -m "Glosor kapitel 4"
 git push
 ```
 
-Workflowen genererar meningar för de nya orden, committar dem (`[skip ci]`), bygger `glosor/index.json` och publicerar på nytt. Efter 1–2 minuter syns listan i appen. Du behöver aldrig redigera `index.json` för hand.
+Workflowen genererar meningar för de nya orden, committar dem (`[skip ci]`), bygger `glosor/index.json` och publicerar på nytt. Efter några minuter syns listan i appen. Du behöver aldrig redigera `index.json` för hand.
 
 **Testa lokalt:**
 
 ```bash
-python scripts/fetch_glosor.py --dry-run   # kräver local/.env, annars hoppas den över
-export GEMINI_API_KEY=...            # valfritt – utan nyckel hoppas meningarna över
+python scripts/fetch_glosor.py --dry-run  # glosor.eu-inloggning från local/.env, annars hoppas den över
+export GEMINI_API_KEY=...                 # valfritt – utan nyckel hoppas meningarna över
 python scripts/generate_sentences.py
 python scripts/build_index.py
-python -m http.server 8000           # öppna http://localhost:8000
+python -m http.server 8000                # öppna http://localhost:8000
 ```
 
 ## Filer
@@ -200,12 +214,15 @@ python -m http.server 8000           # öppna http://localhost:8000
 glosapp/
 ├── index.html                  # hela appen (HTML + CSS + JS, inga beroenden)
 ├── manifest.webmanifest        # gör att den kan installeras på hemskärmen
-├── sentences_config.json       # nivå, längd och modell för exempelmeningarna
+├── sentences_config.json       # nivå, längd, modell och reservmodell för meningarna
 ├── icon.svg, icon-192.png, icon-512.png
 ├── .gitignore                  # CLAUDE.md, .claude/, local/, _site/, __pycache__/
-├── local/                      # git-ignorerad: .env med glosor.eu-inloggning, sparade sidor
+├── local/                      # git-ignorerad: .env (inloggning + nyckel), sparade glosor.eu-sidor, check_models.py
 ├── glosor/
-│   ├── 2026-10-07__forever_young.csv  # en övning = en CSV
+│   ├── 2026-09-16__that_sounds_brilliant.csv   # en övning = en CSV (# titel, # tema, # källa)
+│   ├── 2026-09-23__doing_it_my_way.csv
+│   ├── 2026-09-30__my_hobby_my_job.csv
+│   ├── 2026-10-07__forever_young.csv
 │   ├── *.sentences.json        # genereras av Gemini – får redigeras (sätt "locked": true)
 │   └── index.json              # genereras – skrivs över av workflowen
 ├── scripts/
@@ -213,7 +230,7 @@ glosapp/
 │   ├── glos_csv.py             # gemensam CSV-inläsning
 │   ├── generate_sentences.py   # Gemini → *.sentences.json (nya ord, ändrat tema, ev. tema)
 │   └── build_index.py          # bygger index.json
-└── .github/workflows/pages.yml # (dagligen) hämta → meningar → commit → index → Pages
+└── .github/workflows/pages.yml # push/dagligen: hämta → meningar → commit → index → Pages
 ```
 
 ## Kända begränsningar
