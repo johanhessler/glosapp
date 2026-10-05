@@ -2,3 +2,4 @@ CLAUDE.md
 .claude/
 _site/
 __pycache__/
+local/

@@ -194,5 +194,5 @@ glosapp/
 
 ## Möjliga nästa steg
 
-- **Skript för glosor.eu → CSV.** Lärarens övningssidor (`glosor.eu/ovning/<namn>.<id>.html`) visar hela listan utan inloggning, så ett litet skript kan hämta sidan, plocka ut ordparen och pusha en CSV.
+- **Skript för glosor.eu → CSV.** Lärarens övningar kräver klassens inloggning, så ett lokalt skript (utanför repot) loggar in, hämtar nya övningar och skriver dem som CSV.
 - **Se resultaten från din dator.** Det kräver en liten backend, t.ex. en Supabase-tabell eller en Azure Function, som appen skickar rundresultat till.
