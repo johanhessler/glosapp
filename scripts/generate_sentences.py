@@ -4,11 +4,11 @@
 För varje glosor/<namn>.csv skrivs glosor/<namn>.sentences.json. Bara ord som saknar
 mening skickas till Gemini, så varje ord kostar ett anrop en gång.
 
-    GEMINI_API_KEY=... python scripts/generate_sentences.py               # bara nya ord
-    GEMINI_API_KEY=... python scripts/generate_sentences.py --regenerate  # gör om alla olåsta
-                                                                          # meningar med annat tema
+    GEMINI_API_KEY=... python scripts/generate_sentences.py               # nya ord + ändrat tema
+    GEMINI_API_KEY=... python scripts/generate_sentences.py --regenerate  # gör om alla olåsta meningar
 
 Tema: "# tema: ..." överst i CSV-filen. Utan tema blir det vardagliga meningar.
+Ändras temat i en lista görs dess olåsta meningar om automatiskt vid nästa körning.
 Vill du behålla en mening du rättat för hand: sätt "locked": true på raden i JSON-filen.
 """
 import argparse
@@ -180,7 +180,7 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
         old = existing.get((w["sv"], w["en"]))
         if old is None:
             todo.append(w)
-        elif regenerate and not old.get("locked") and old.get("theme") != theme:
+        elif not old.get("locked") and (regenerate or (old.get("theme") or "") != theme):
             todo.append(w)
 
     keep_keys = {(w["sv"], w["en"]) for w in info["words"]}
@@ -215,7 +215,7 @@ def process_list(path: Path, cfg: dict, api_key: str, regenerate: bool) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--regenerate", action="store_true", help="gör om olåsta meningar som har ett annat tema")
+    parser.add_argument("--regenerate", action="store_true", help="gör om alla olåsta meningar, även med samma tema")
     parser.add_argument("files", nargs="*", help="bara dessa CSV-filer (standard: alla i glosor/)")
     args = parser.parse_args()
 

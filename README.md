@@ -39,7 +39,7 @@ flowchart LR
 ```
 
 - **Ingen server och ingen databas.** Appen läser `glosor/index.json`, sedan den CSV-fil som väljs och, om den finns, tillhörande `.sentences.json`.
-- **Gemini anropas bara i GitHub Action**, aldrig från appen. API-nyckeln ligger som GitHub Secret och syns inte för den som öppnar sidan. Bara ord som saknar mening skickas, så varje ord genereras en gång.
+- **Gemini anropas bara i GitHub Action**, aldrig från appen. API-nyckeln ligger som GitHub Secret och syns inte för den som öppnar sidan. Bara ord som saknar mening skickas (och ord i en lista vars tema du har ändrat), så varje ord genereras normalt en gång.
 - **Resultaten sparas bara på enheten** (i webbläsarens localStorage). Om han byter enhet eller rensar webbläsardatan börjar statistiken om från noll.
 - **Uppläsningen** använder enhetens inbyggda talsyntes (Web Speech API), så det behövs varken API-nyckel eller nätverk för ljudet.
 
@@ -123,7 +123,8 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 ```
 
 - **Rätta en mening:** redigera filen direkt på GitHub och sätt `"locked": true`, så skrivs den aldrig över.
-- **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha, gå sedan till *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar som har ett annat tema om. Nya ord får alltid listans aktuella tema automatiskt.
+- **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden blir de vardagliga.
+- **Få nya varianter av alla meningar:** *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar om, även de som redan har rätt tema.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
 - Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions, och listan saknar meningar tills nästa körning.
 
