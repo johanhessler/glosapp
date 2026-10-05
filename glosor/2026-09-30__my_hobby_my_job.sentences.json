@@ -1,0 +1,184 @@
+{
+  "items": [
+    {
+      "sv": "talangfull",
+      "en": "talented",
+      "sentence_en": "The talented girl sells her cool drawings to her friends.",
+      "sentence_sv": "Den talangfulla flickan säljer sina coola teckningar till sina kompisar.",
+      "target": "talented",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "ganska",
+      "en": "pretty",
+      "sentence_en": "Baking cakes is pretty easy when you practice every day.",
+      "sentence_sv": "Att baka kakor är ganska enkelt när du övar varje dag.",
+      "target": "pretty",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "okej",
+      "en": "decent",
+      "sentence_en": "He makes a decent profit from his handmade wooden toys.",
+      "sentence_sv": "Han gör en okej vinst på sina handgjorda träleksaker.",
+      "target": "decent",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "ursprungligen",
+      "en": "originally",
+      "sentence_en": "She originally made jewelry just for fun in her room.",
+      "sentence_sv": "Hon gjorde ursprungligen smycken bara för att det var roligt i sitt rum.",
+      "target": "originally",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "sträva efter",
+      "en": "pursue",
+      "sentence_en": "I want to pursue my dream of making video games.",
+      "sentence_sv": "Jag vill sträva efter min dröm att göra datorspel.",
+      "target": "pursue",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "2000-talet",
+      "en": "21st century",
+      "sentence_en": "In the 21st century, kids can start businesses online.",
+      "sentence_sv": "På 2000-talet kan barn starta företag på nätet.",
+      "target": "21st century",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "möjligt",
+      "en": "possible",
+      "sentence_en": "With hard work, it is possible to sell your art.",
+      "sentence_sv": "Med hårt arbete är det möjligt att sälja sin konst.",
+      "target": "possible",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "starta",
+      "en": "launch",
+      "sentence_en": "Tomorrow we will launch our new website for dog toys.",
+      "sentence_sv": "Imorgon kommer vi att starta vår nya webbplats för hundleksaker.",
+      "target": "launch",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "succé|framgång",
+      "en": "success",
+      "sentence_en": "Her small T-shirt shop is a big success now.",
+      "sentence_sv": "Hennes lilla t-shirtbutik är en stor succé nu.",
+      "target": "success",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "hantera",
+      "en": "deal with",
+      "sentence_en": "You must learn to deal with happy and angry customers.",
+      "sentence_sv": "Du måste lära dig att hantera glada och arga kunder.",
+      "target": "deal with",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "ovänlig",
+      "en": "unkind",
+      "sentence_en": "Do not listen to unkind comments about your drawings.",
+      "sentence_sv": "Lyssna inte på ovänliga kommentarer om dina teckningar.",
+      "target": "unkind",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "förbättra",
+      "en": "improve",
+      "sentence_en": "I practice piano every day to improve my music.",
+      "sentence_sv": "Jag övar piano varje dag för att förbättra min musik.",
+      "target": "improve",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "vara bra att ha",
+      "en": "come in handy",
+      "sentence_en": "Good math skills will come in handy for your business.",
+      "sentence_sv": "Goda matematikkunskaper kommer att vara bra att ha för ditt företag.",
+      "target": "come in handy",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "närma sig",
+      "en": "approach",
+      "sentence_en": "A famous music agent decided to approach the young singer.",
+      "sentence_sv": "En känd musikagent bestämde sig för att närma sig den unga sångaren.",
+      "target": "approach",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "marknadsföra",
+      "en": "promote",
+      "sentence_en": "Use social media to promote your homemade cookies.",
+      "sentence_sv": "Använd sociala medier för att marknadsföra dina hembakade kakor.",
+      "target": "promote",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "avtal",
+      "en": "deal",
+      "sentence_en": "The young coder signed a great deal with the company.",
+      "sentence_sv": "Den unga kodaren skrev på ett jättebra avtal med företaget.",
+      "target": "deal",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "andas",
+      "en": "breathe",
+      "sentence_en": "Remember to breathe slowly before you show your new invention.",
+      "sentence_sv": "Kom ihåg att andas långsamt innan du visar din nya uppfinning.",
+      "target": "breathe",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "talangscout",
+      "en": "talent spotter",
+      "sentence_en": "A talent spotter saw his skating videos on the internet.",
+      "sentence_sv": "En talangscout såg hans skejtfilmer på internet.",
+      "target": "talent spotter",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "få syn på|hitta",
+      "en": "spot",
+      "sentence_en": "Big companies always spot talented children at the art show.",
+      "sentence_sv": "Stora företag hittar alltid talangfulla barn på konstutställningen.",
+      "target": "spot",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    },
+    {
+      "sv": "signera|skriva på",
+      "en": "sign",
+      "sentence_en": "You should sign the contract for your new book today.",
+      "sentence_sv": "Du borde skriva på kontraktet för din nya bok idag.",
+      "target": "sign",
+      "theme": "att göra sin hobby till sitt jobb – talanger, att bli upptäckt och starta något eget",
+      "locked": false
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "items": [
+    {
+      "sv": "cykla på",
+      "en": "ride",
+      "sentence_en": "Can you ride this tall unicycle at the club?",
+      "sentence_sv": "Kan du cykla på den här höga enhjulingen på klubben?",
+      "target": "ride",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "enhjuling",
+      "en": "unicycle",
+      "sentence_en": "He fell off the unicycle but laughed and tried again.",
+      "sentence_sv": "Han ramlade av enhjulingen men skrattade och försökte igen.",
+      "target": "unicycle",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "målvakt",
+      "en": "goalkeeper",
+      "sentence_en": "Our goalkeeper made a great save during the football game.",
+      "sentence_sv": "Vår målvakt gjorde en jättebra räddning under fotbollsmatchen.",
+      "target": "goalkeeper",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "fantastiskt",
+      "en": "brilliant",
+      "sentence_en": "Your new costume for the masquerade is brilliant!",
+      "sentence_sv": "Din nya kostym till maskeraden är fantastisk!",
+      "target": "brilliant",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "dra",
+      "en": "drag",
+      "sentence_en": "We had to drag the heavy football goal onto the grass.",
+      "sentence_sv": "Vi var tvungna att dra det tunga fotbollsmålet till gräset.",
+      "target": "drag",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "bra på",
+      "en": "good at",
+      "sentence_en": "She is very good at painting masks for the party.",
+      "sentence_sv": "Hon är jättebra på att måla masker till festen.",
+      "target": "good at",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "inse|förstå",
+      "en": "realise",
+      "sentence_en": "I realise that football is actually a very fun sport.",
+      "sentence_sv": "Jag inser att fotboll faktiskt är en väldigt rolig sport.",
+      "target": "realise",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "en gång",
+      "en": "once",
+      "sentence_en": "We practice riding the unicycle once a week.",
+      "sentence_sv": "Vi tränar på att cykla enhjuling en gång i veckan.",
+      "target": "once",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "grafik",
+      "en": "graphics",
+      "sentence_en": "The graphics in this new computer game look amazing.",
+      "sentence_sv": "Grafiken i det här nya datorspelet ser fantastisk ut.",
+      "target": "graphics",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "acceptera|tillåta",
+      "en": "accept",
+      "sentence_en": "The coach did not accept dirty shoes in the gym.",
+      "sentence_sv": "Tränaren accepterade inte smutsiga skor i gympasalen.",
+      "target": "accept",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "medlemmar",
+      "en": "members",
+      "sentence_en": "All members of the club get a cool T-shirt.",
+      "sentence_sv": "Alla medlemmar i klubben får en cool t-shirt.",
+      "target": "members",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "konstform|typ av konst",
+      "en": "art form",
+      "sentence_en": "Painting masks is a very fun art form to try.",
+      "sentence_sv": "Att måla masker är en väldigt rolig konstform att prova.",
+      "target": "art form",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "spännande",
+      "en": "exciting",
+      "sentence_en": "It is exciting to try the unicycle for the first time.",
+      "sentence_sv": "Det är spännande att prova enhjuling för första gången.",
+      "target": "exciting",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "försäkra|garantera",
+      "en": "assure",
+      "sentence_en": "I assure you that riding a unicycle is not impossible.",
+      "sentence_sv": "Jag försäkrar dig att det inte är omöjligt att cykla enhjuling.",
+      "target": "assure",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "träning",
+      "en": "session",
+      "sentence_en": "We had a fun football session at the club today.",
+      "sentence_sv": "Vi hade en rolig fotbollsträning på klubben idag.",
+      "target": "session",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "evenemang",
+      "en": "event",
+      "sentence_en": "The masquerade is the biggest event of the year.",
+      "sentence_sv": "Maskeraden är årets största evenemang.",
+      "target": "event",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "intresserad av",
+      "en": "interested in",
+      "sentence_en": "Are you interested in joining our new football club?",
+      "sentence_sv": "Är du intresserad av att gå med i vår nya fotbollsklubb?",
+      "target": "interested in",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "maskerad",
+      "en": "fancy dress party",
+      "sentence_en": "I wore a dragon costume to the fancy dress party.",
+      "sentence_sv": "Jag bar en drakdräkt på maskeraden.",
+      "target": "fancy dress party",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "leva sig in",
+      "en": "inhabit",
+      "sentence_en": "You must inhabit your character when you wear the costume.",
+      "sentence_sv": "Du måste leva dig in i din karaktär när du bär kostymen.",
+      "target": "inhabit",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    },
+    {
+      "sv": "försöka|prova",
+      "en": "give it a go",
+      "sentence_en": "The unicycle looks hard, but I will give it a go.",
+      "sentence_sv": "Enhjulingen ser svår ut, men jag ska ge det ett försök.",
+      "target": "give it a go",
+      "theme": "fritidsklubbar och att prova nya hobbyer, t.ex. enhjuling, fotboll och maskerad",
+      "locked": false
+    }
+  ]
+}
