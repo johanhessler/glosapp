@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "sv": "skola",
+      "en": "school",
+      "sentence_en": "The yellow tractor drives past our school every morning.",
+      "sentence_sv": "Den gula traktorn kör förbi vår skola varje morgon.",
+      "target": "school",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "lärare",
+      "en": "teacher",
+      "sentence_en": "Our teacher shows us a big green tractor in a book.",
+      "sentence_sv": "Vår lärare visar oss en stor grön traktor i en bok.",
+      "target": "teacher",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "elev",
+      "en": "pupil|student",
+      "sentence_en": "The young student helps the farmer to feed the cows.",
+      "sentence_sv": "Den unga eleven hjälper bonden att mata korna.",
+      "target": "student",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "klassrum",
+      "en": "classroom",
+      "sentence_en": "We draw big combine harvesters in our classroom today.",
+      "sentence_sv": "Vi ritar stora skördetröskor i vårt klassrum idag.",
+      "target": "classroom",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "suddgummi",
+      "en": "rubber|eraser",
+      "sentence_en": "I use my eraser to fix the tractor's wheels.",
+      "sentence_sv": "Jag använder mitt suddgummi för att rätta till traktorns hjul.",
+      "target": "eraser",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "penna",
+      "en": "pen|pencil",
+      "sentence_en": "Can I borrow your pencil to draw a red tractor?",
+      "sentence_sv": "Får jag låna din penna för att rita en röd traktor?",
+      "target": "pencil",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "linjal",
+      "en": "ruler",
+      "sentence_en": "The boy measures his toy tractor with a long ruler.",
+      "sentence_sv": "Pojken mäter sin leksakstraktor med en lång linjal.",
+      "target": "ruler",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "läxa",
+      "en": "homework",
+      "sentence_en": "My homework is to write about life on a farm.",
+      "sentence_sv": "Min läxa är att skriva om livet på en bondgård.",
+      "target": "homework",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "rast",
+      "en": "break|recess",
+      "sentence_en": "During our break, we watch the tractor in the field.",
+      "sentence_sv": "Under vår rast tittar vi på traktorn på fältet.",
+      "target": "break",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "matsal",
+      "en": "dining hall|canteen",
+      "sentence_en": "We talk about big farm machines in the school canteen.",
+      "sentence_sv": "Vi pratar om stora jordbruksmaskiner i skolans matsal.",
+      "target": "canteen",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "skolväska",
+      "en": "school bag|schoolbag",
+      "sentence_en": "He has a green tractor picture on his new schoolbag.",
+      "sentence_sv": "Han har en bild på en grön traktor på sin nya skolväska.",
+      "target": "schoolbag",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "läsa",
+      "en": "(to) read",
+      "sentence_en": "I like to read books about big farm machines.",
+      "sentence_sv": "Jag tycker om att läsa böcker om stora jordbruksmaskiner.",
+      "target": "read",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    }
+  ]
+}

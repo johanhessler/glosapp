@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "sv": "häst",
+      "en": "horse",
+      "sentence_en": "The brown horse runs next to the green tractor.",
+      "sentence_sv": "Den bruna hästen springer bredvid den gröna traktorn.",
+      "target": "horse",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "ko",
+      "en": "cow",
+      "sentence_en": "A big cow looks at the loud harvester in the field.",
+      "sentence_sv": "En stor ko tittar på den högljudda skördetröskan på fältet.",
+      "target": "cow",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "gris",
+      "en": "pig",
+      "sentence_en": "The happy pig plays in the mud near the tractor.",
+      "sentence_sv": "Den glada grisen leker i leran nära traktorn.",
+      "target": "pig",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "får",
+      "en": "sheep",
+      "sentence_en": "The small sheep eat grass behind the big farm tractor.",
+      "sentence_sv": "De små fåren äter gräs bakom den stora gårdstraktorn.",
+      "target": "sheep",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "get",
+      "en": "goat",
+      "sentence_en": "A playful goat climbs on the big tractor tire.",
+      "sentence_sv": "En lekfull get klättrar på det stora traktordäcket.",
+      "target": "goat",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "höna",
+      "en": "hen",
+      "sentence_en": "The little hen finds seeds under the big tractor.",
+      "sentence_sv": "Den lilla hönan hittar frön under den stora traktorn.",
+      "target": "hen",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "tupp",
+      "en": "rooster|cock",
+      "sentence_en": "The red rooster sits on the tractor and crows loudly.",
+      "sentence_sv": "Den röda tuppen sitter på traktorn och galer högt.",
+      "target": "rooster",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "anka",
+      "en": "duck",
+      "sentence_en": "A yellow duck swims in the pond near the harvester.",
+      "sentence_sv": "En gul anka simmar i dammen nära skördetröskan.",
+      "target": "duck",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "kalv",
+      "en": "calf",
+      "sentence_en": "The young calf sleeps next to the new red tractor.",
+      "sentence_sv": "Den unga kalven sover bredvid den nya röda traktorn.",
+      "target": "calf",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    },
+    {
+      "sv": "lamm",
+      "en": "lamb",
+      "sentence_en": "The sweet lamb runs to the tractor in the field.",
+      "sentence_sv": "Det söta lammet springer till traktorn på fältet.",
+      "target": "lamb",
+      "theme": "traktorer, lantbruk, skördetröskor och andra jordbruksmaskiner",
+      "locked": false
+    }
+  ]
+}
