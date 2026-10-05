@@ -30,6 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: main        # senaste main, inte commiten som startade körningen – en köad körning ska se botens commits
           fetch-depth: 0   # behövs för att läsa datum per glosfil ur git-historiken
 
       - uses: actions/setup-python@v7
@@ -64,8 +65,16 @@ jobs:
               msg="Genererade exempelmeningar [skip ci]"
             fi
             git commit -m "$msg"
-            git pull --rebase --autostash
-            git push
+            if git pull --rebase --autostash && git push; then
+              echo "Pushade: $msg"
+            else
+              # main ändrades under körningen (t.ex. en annan körning hann före) – släpp vår commit,
+              # publicera senaste main; det som saknas tas vid nästa körning
+              git rebase --abort 2>/dev/null || true
+              git fetch origin main
+              git reset --hard origin/main
+              echo "::warning::Kunde inte pusha (main ändrades under körningen) – publicerar senaste main"
+            fi
           fi
 
       - name: Bygg glosor/index.json
