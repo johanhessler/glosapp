@@ -2,5 +2,5 @@
   "learner": "svensk elev i årskurs 5, nybörjare i engelska (ungefär CEFR A1–A2)",
   "max_words": 12,
   "model": "gemini-3.8-flash",
-  "fallback_model": "gemini-3.5-flash"
+  "fallback_model": "gemini-3.5-flash-lite"
 }
