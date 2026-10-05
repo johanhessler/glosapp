@@ -28,9 +28,10 @@ root_dir = Path(__file__).resolve().parent.parent
 list_dir = root_dir / "glosor"
 config_file = root_dir / "sentences_config.json"
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-retry_attempts = 8   # 7 omförsök: 15 + 30 + 60 + 4 × 120 s ≈ 10 min
-batch_size = 50      # ord per anrop – i praktiken en hel lista; gränsen skyddar bara mot jättelistor
-batch_pause = 4      # s mellan anrop, snällt mot gratisnivåns gräns för anrop per minut
+primary_attempts = 3   # försök med model (väntan 15, 30 s) – varje försök kostar av Flash-kvoten 20/dag
+fallback_attempts = 5  # försök med fallback_model (väntan 15, 30, 60, 120 s) – lite-kvoten är 500/dag
+batch_size = 50        # ord per anrop – i praktiken en hel lista; gränsen skyddar bara mot jättelistor
+batch_pause = 13       # s mellan anrop – Flash tillåter 5 anrop/minut på gratisnivån
 
 default_config = {
     "learner": "svensk elev i mellanstadiet, nybörjare i engelska (ungefär CEFR A1–A2)",
@@ -91,35 +92,47 @@ def call_gemini(prompt: str, model: str, api_key: str, fallback_model: str = "")
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 0.9},
     }).encode("utf-8")
-    # Gratisnivån svarar ofta 503 (hög belastning) eller 429 (för många anrop). Det gör inget
-    # om det tar några minuter, så vi väntar 15, 30, 60 och sedan 120 s åt gången (~10 min totalt).
-    # Sista försöket görs med reservmodellen (om den finns), som har egen kapacitet och kvot.
-    for attempt in range(1, retry_attempts + 1):
-        use_model = fallback_model if attempt == retry_attempts and fallback_model else model
-        if use_model != model:
-            print(f"  Sista försöket med reservmodellen {use_model} …")
+    # Gratisnivån svarar ofta 503 (hög belastning) eller 429 (för många anrop), och även
+    # misslyckade anrop räknas mot dagskvoten (Flash: 20/dag, lite: 500/dag). Därför bara några
+    # försök med huvudmodellen och sedan fler med reservmodellen, som har egen och större kvot.
+    plan = [(model, primary_attempts)] + ([(fallback_model, fallback_attempts)] if fallback_model else [])
+    last_error = ""
+    for plan_no, (use_model, attempts) in enumerate(plan):
+        if plan_no:
+            print(f"  Byter till reservmodellen {use_model} …")
         req = urllib.request.Request(
             api_url.format(model=use_model),
             data=body,
             headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
             method="POST",
         )
-        try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
-                data = json.load(resp)
-            break
-        except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")
-            if e.code not in (429, 500, 502, 503, 504) or attempt == retry_attempts:
-                raise RuntimeError(f"Gemini-fel {e.code}: {detail[:500]}") from None
-            delay = max(retry_delay(attempt), suggested_delay(e.headers.get("Retry-After"), detail))
-            print(f"  Gemini svarade {e.code}, försöker igen om {delay} s ({attempt}/{retry_attempts - 1}) …")
-        except (urllib.error.URLError, TimeoutError) as e:
-            if attempt == retry_attempts:
-                raise RuntimeError(f"Kunde inte nå Gemini: {e}") from None
-            delay = retry_delay(attempt)
-            print(f"  Kunde inte nå Gemini ({e}), försöker igen om {delay} s …")
-        time.sleep(delay)
+        for attempt in range(1, attempts + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=180) as resp:
+                    return extract_json(json.load(resp))
+            except urllib.error.HTTPError as e:
+                detail = e.read().decode("utf-8", "replace")
+                last_error = f"Gemini-fel {e.code} ({use_model}): {detail[:500]}"
+                if e.code not in (429, 500, 502, 503, 504):
+                    raise RuntimeError(last_error) from None
+                if e.code == 429 and "PerDay" in detail:
+                    print(f"  {use_model}: dagskvoten är slut")
+                    break
+                delay = max(retry_delay(attempt), suggested_delay(e.headers.get("Retry-After"), detail))
+                status = f"{use_model} svarade {e.code}"
+            except (urllib.error.URLError, TimeoutError) as e:
+                last_error = f"Kunde inte nå Gemini ({use_model}): {e}"
+                delay = retry_delay(attempt)
+                status = f"kunde inte nå {use_model} ({e})"
+            if attempt < attempts:
+                print(f"  {status}, försöker igen om {delay} s ({attempt}/{attempts - 1}) …")
+                time.sleep(delay)
+            else:
+                print(f"  {status}, ger upp {use_model}")
+    raise RuntimeError(last_error)
+
+
+def extract_json(data: dict) -> dict:
     text = "".join(
         p.get("text", "")
         for c in data.get("candidates", [])[:1]
@@ -317,7 +330,7 @@ def main() -> int:
             print(f"{path.name}: FEL – {e}", file=sys.stderr)
             continue
         if changed and i < len(paths) - 1:
-            time.sleep(4)  # snällt mot gratisnivåns gräns för anrop per minut
+            time.sleep(batch_pause)
     if failures:
         print(f"{failures} listor misslyckades – se felen ovan.", file=sys.stderr)
         return 1  # syns som varning i GitHub Actions (steget har continue-on-error)

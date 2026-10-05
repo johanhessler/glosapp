@@ -120,7 +120,7 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 | `learner` | Nivån. Påverkar hur enkla orden och grammatiken blir. |
 | `max_words` | Ungefärlig maxlängd per mening. |
 | `model` | Gemini-modell. Google byter namn ofta, se [modellistan](https://ai.google.dev/gemini-api/docs/models) och välj en Flash-modell som ingår i gratisnivån. |
-| `fallback_model` | Reservmodell för sista omförsöket när `model` är överbelastad. Tom sträng = ingen reserv. |
+| `fallback_model` | Reservmodell när `model` är överbelastad eller dagskvoten är slut. Gärna en lite-modell, som har större kvot. Tom sträng = ingen reserv. |
 
 ### Resultatet: `glosor/<namn>.sentences.json`
 
@@ -141,7 +141,7 @@ Temat sätts per lista, så att det kan följa kapitlet i boken. Skriv till exem
 - **Byta tema för en befintlig lista:** ändra `# tema:` i CSV-filen och pusha. Listans olåsta meningar görs då om automatiskt med det nya temat. Tar du bort raden väljer Gemini ett nytt.
 - **Få nya varianter av alla meningar:** *Actions* → *Publicera glosappen* → *Run workflow* och kryssa i **regenerate**. Då görs alla olåsta meningar om, även de som redan har rätt tema.
 - `target` är exakt den form som står i meningen. Det är den som blankas i Lucktext. Skriptet kontrollerar att den finns i meningen och ber Gemini en gång till om något inte stämmer.
-- Gratisnivån svarar ofta "hög belastning" (503) eller "för många anrop" (429). Skriptet skickar en hel lista per anrop och väntar då 15 s, 30 s, 60 s och sedan 120 s åt gången, upp till ungefär 10 minuter. Sista försöket görs med `fallback_model`. Det som lyckas sparas. Ord som fortfarande saknar mening tas med vid nästa körning, senast vid den dagliga körningen.
+- Gratisnivån svarar ofta "hög belastning" (503) eller "för många anrop" (429). Gratisnivån tillåter bara 20 anrop per dag för Flash-modellerna (500 för lite-modellerna), och även misslyckade anrop räknas. Skriptet skickar därför en hel lista per anrop, gör högst 3 försök med `model` och sedan upp till 5 med `fallback_model`, med 15 s till 2 min väntan emellan. Mellan anrop väntar det 13 s (Flash tillåter 5 anrop per minut). Aktuell förbrukning syns i [AI Studio](https://aistudio.google.com/rate-limit). Det som lyckas sparas. Ord som fortfarande saknar mening tas med vid nästa körning, senast vid den dagliga körningen.
 - Om Gemini krånglar (fel nyckel, gratiskvoten slut) publiceras appen ändå. Steget markeras med en varning i Actions.
 
 ## Automatisk hämtning från glosor.eu
