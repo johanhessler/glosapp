@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "sv": "utmattad",
+      "en": "exhausted",
+      "sentence_en": "The boy was exhausted after the long trip.",
+      "sentence_sv": "Pojken var utmattad efter den långa resan.",
+      "target": "exhausted",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "köpte",
+      "en": "bought",
+      "sentence_en": "She bought an ice cream on the boat.",
+      "sentence_sv": "Hon köpte en glass på båten.",
+      "target": "bought",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "resa",
+      "en": "journey",
+      "sentence_en": "The journey over the blue sea was fun.",
+      "sentence_sv": "Resan över det blå havet var rolig.",
+      "target": "journey",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "färja",
+      "en": "ferry",
+      "sentence_en": "We take the big ferry to the island.",
+      "sentence_sv": "Vi tar den stora färjan till ön.",
+      "target": "ferry",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "platt",
+      "en": "flat",
+      "sentence_en": "The stone on the beach is very flat.",
+      "sentence_sv": "Stenen på stranden är väldigt platt.",
+      "target": "flat",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "lättnad",
+      "en": "relief",
+      "sentence_en": "It was a big relief to find my bag.",
+      "sentence_sv": "Det var en stor lättnad att hitta min väska.",
+      "target": "relief",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "rakt",
+      "en": "straight",
+      "sentence_en": "Walk straight ahead to reach the school.",
+      "sentence_sv": "Gå rakt fram för att nå skolan.",
+      "target": "straight",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "klasskamrater",
+      "en": "fellow pupils",
+      "sentence_en": "My fellow pupils play football outside.",
+      "sentence_sv": "Mina klasskamrater spelar fotboll utomhus.",
+      "target": "fellow pupils",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "självständighet",
+      "en": "independence",
+      "sentence_en": "The children learn independence at their school.",
+      "sentence_sv": "Barnen lär sig självständighet i sin skola.",
+      "target": "independence",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "utbildning",
+      "en": "education",
+      "sentence_en": "Good education helps us learn many things.",
+      "sentence_sv": "Bra utbildning hjälper oss att lära oss många saker.",
+      "target": "education",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "regering",
+      "en": "government",
+      "sentence_en": "The government makes rules for the city.",
+      "sentence_sv": "Regeringen stiftar lagar för staden.",
+      "target": "government",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "erbjuda",
+      "en": "offer",
+      "sentence_en": "They offer free fruit to all students.",
+      "sentence_sv": "De erbjuder gratis frukt till alla elever.",
+      "target": "offer",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "grundskola",
+      "en": "primary school",
+      "sentence_en": "Small children go to primary school.",
+      "sentence_sv": "Små barn går i grundskola.",
+      "target": "primary school",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "betydelse",
+      "en": "importance",
+      "sentence_en": "We talk about the importance of reading books.",
+      "sentence_sv": "Vi pratar om betydelsen av att läsa böcker.",
+      "target": "importance",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "trots",
+      "en": "despite",
+      "sentence_en": "He went outside despite the cold rain.",
+      "sentence_sv": "Han gick ut trots det kalla regnet.",
+      "target": "despite",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "motstånd",
+      "en": "opposition",
+      "sentence_en": "There was some opposition to the new rule.",
+      "sentence_sv": "Det fanns lite motstånd mot den nya regeln.",
+      "target": "opposition",
+      "theme": "En spännande skolresa med båt och nya äventyr.",
+      "theme_auto": true,
+      "locked": false
+    }
+  ]
+}
