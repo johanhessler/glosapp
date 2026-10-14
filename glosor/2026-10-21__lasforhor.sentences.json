@@ -1,0 +1,184 @@
+{
+  "items": [
+    {
+      "sv": "viska",
+      "en": "whisper",
+      "sentence_en": "The ghosts whisper secrets in the dark room.",
+      "sentence_sv": "Spökena viskar hemligheter i det mörka rummet.",
+      "target": "whisper",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "mystik",
+      "en": "mysterious",
+      "sentence_en": "This old castle looks very mysterious tonight.",
+      "sentence_sv": "Det här gamla slottet ser väldigt mystiskt ut i natt.",
+      "target": "mysterious",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fly",
+      "en": "escape",
+      "sentence_en": "We need to escape from the spooky place.",
+      "sentence_sv": "Vi måste fly från den läskiga platsen.",
+      "target": "escape",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "plötsligt",
+      "en": "suddenly",
+      "sentence_en": "Suddenly, a black cat jumps out.",
+      "sentence_sv": "Plötsligt hoppar en svart katt ut.",
+      "target": "Suddenly",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "bakom",
+      "en": "behind",
+      "sentence_en": "A monster is hiding behind the old door.",
+      "sentence_sv": "Ett monster gömmer sig bakom den gamla dörren.",
+      "target": "behind",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "rädd",
+      "en": "afraid",
+      "sentence_en": "The small boy is afraid of ghosts.",
+      "sentence_sv": "Den lille pojken är rädd för spöken.",
+      "target": "afraid",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "läskig",
+      "en": "scary",
+      "sentence_en": "That clown mask is really scary.",
+      "sentence_sv": "Den där clownmasken är verkligen läskig.",
+      "target": "scary",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "skrämd",
+      "en": "frightened",
+      "sentence_en": "The tiny mouse looks frightened by the noise.",
+      "sentence_sv": "Den lilla musen ser skrämd ut av oljudet.",
+      "target": "frightened",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "kuslig",
+      "en": "creepy",
+      "sentence_en": "We heard a creepy sound upstairs.",
+      "sentence_sv": "Vi hörde ett kusligt ljud på övervåningen.",
+      "target": "creepy",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "upptäcka",
+      "en": "discover",
+      "sentence_en": "They discover a hidden key under the rug.",
+      "sentence_sv": "De upptäcker en gömd nyckel under mattan.",
+      "target": "discover",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fotsteg",
+      "en": "footsteps",
+      "sentence_en": "We hear heavy footsteps on the floor.",
+      "sentence_sv": "Vi hör tunga fotsteg på golvet.",
+      "target": "footsteps",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "följa",
+      "en": "follow",
+      "sentence_en": "The friendly dog will follow us home.",
+      "sentence_sv": "Den vänliga hunden kommer att följa oss hem.",
+      "target": "follow",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fladdermus",
+      "en": "bat",
+      "sentence_en": "A black bat flies across the moon.",
+      "sentence_sv": "En svart fladdermus flyger över månen.",
+      "target": "bat",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "hemsökt hus",
+      "en": "haunted house",
+      "sentence_en": "We explored the haunted house after dark.",
+      "sentence_sv": "Vi utforskade det hemsökta huset efter mörkrets inbrott.",
+      "target": "haunted house",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "magi",
+      "en": "magic",
+      "sentence_en": "The wizard uses magic to open the door.",
+      "sentence_sv": "Trollkarlen använder magi för att öppna dörren.",
+      "target": "magic",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "försiktigt",
+      "en": "carefully",
+      "sentence_en": "She walks carefully across the broken bridge.",
+      "sentence_sv": "Hon går försiktigt över den trasiga bron.",
+      "target": "carefully",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "långsamt",
+      "en": "slowly",
+      "sentence_en": "The turtle moves very slowly in the grass.",
+      "sentence_sv": "Sköldpaddan rör sig väldigt långsamt i gräset.",
+      "target": "slowly",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "orolig",
+      "en": "worried",
+      "sentence_en": "Mom looks worried when we come home late.",
+      "sentence_sv": "Mamma ser orolig ut när vi kommer hem sent.",
+      "target": "worried",
+      "theme": "Ett spännande äventyr i ett mörkt och mystiskt hus på kullen.",
+      "theme_auto": true,
+      "locked": false
+    }
+  ]
+}
