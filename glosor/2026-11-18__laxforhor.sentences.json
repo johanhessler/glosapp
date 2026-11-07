@@ -1,0 +1,174 @@
+{
+  "items": [
+    {
+      "sv": "gepard",
+      "en": "cheetah",
+      "sentence_en": "The fast cheetah runs on the grass.",
+      "sentence_sv": "Den snabba geparden springer på gräset.",
+      "target": "cheetah",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "med en hastighet av",
+      "en": "at a speed of",
+      "sentence_en": "It runs at a speed of fast cars.",
+      "sentence_sv": "Den springer med en hastighet av snabba bilar.",
+      "target": "at a speed of",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "elegant",
+      "en": "sleek",
+      "sentence_en": "The cat has a sleek and soft coat.",
+      "sentence_sv": "Katten har en elegant och mjuk päls.",
+      "target": "sleek",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "jättestor",
+      "en": "huge",
+      "sentence_en": "An elephant is a huge grey animal.",
+      "sentence_sv": "En elefant är ett jättestort grått djur.",
+      "target": "huge",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "betydligt",
+      "en": "considerably",
+      "sentence_en": "The lion is considerably bigger than the cat.",
+      "sentence_sv": "Lejonet är betydligt större än katten.",
+      "target": "considerably",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "utmattad",
+      "en": "exhausted",
+      "sentence_en": "The dog is exhausted after a long run.",
+      "sentence_sv": "Hunden är utmattad efter en lång löprunda.",
+      "target": "exhausted",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "osannolikt",
+      "en": "unlikely",
+      "sentence_en": "It is unlikely to snow on the hot savanna.",
+      "sentence_sv": "Det är osannolikt att det snöar på den varma savannen.",
+      "target": "unlikely",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "stå emot",
+      "en": "put up a fight",
+      "sentence_en": "The small mouse tries to put up a fight.",
+      "sentence_sv": "Den lilla musen försöker stå emot.",
+      "target": "put up a fight",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "skydda",
+      "en": "protect",
+      "sentence_en": "Birds protect their babies in the tree.",
+      "sentence_sv": "Fåglar skyddar sina ungar i trädet.",
+      "target": "protect",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "rovdjur",
+      "en": "predators",
+      "sentence_en": "Lions are dangerous predators on the plains.",
+      "sentence_sv": "Lejon är farliga rovdjur på slätterna.",
+      "target": "predators",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "nackdel",
+      "en": "disadvantage",
+      "sentence_en": "Being small is a disadvantage for the rabbit.",
+      "sentence_sv": "Att vara liten är en nackdel för kaninen.",
+      "target": "disadvantage",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "vanlig",
+      "en": "common",
+      "sentence_en": "Green grass is very common here.",
+      "sentence_sv": "Grönt gräs är mycket vanligt här.",
+      "target": "common",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "dra ihop",
+      "en": "contract",
+      "sentence_en": "Cats contract their paws when they jump.",
+      "sentence_sv": "Katter drar ihop sina tassar när de hoppar.",
+      "target": "contract",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "sengångare",
+      "en": "sloth",
+      "sentence_en": "A slow sloth sleeps in the green tree.",
+      "sentence_sv": "En långsam sengångare sover i det gröna trädet.",
+      "target": "sloth",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "däggdjur",
+      "en": "mammal",
+      "sentence_en": "A horse is a big mammal.",
+      "sentence_sv": "En häst är ett stort däggdjur.",
+      "target": "mammal",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "livnära sig på",
+      "en": "feed on",
+      "sentence_en": "Cows feed on green grass all day.",
+      "sentence_sv": "Kor livnär sig på grönt gräs hela dagen.",
+      "target": "feed on",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "klor",
+      "en": "claws",
+      "sentence_en": "The cat has sharp claws on its paws.",
+      "sentence_sv": "Katten har vassa klor på tassarna.",
+      "target": "claws",
+      "theme": "Vilda djur och natur på savannen",
+      "theme_auto": true,
+      "locked": false
+    }
+  ]
+}
