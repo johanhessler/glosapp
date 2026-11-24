@@ -1,0 +1,184 @@
+{
+  "items": [
+    {
+      "sv": "gälla",
+      "en": "concern",
+      "sentence_en": "The check-up will concern the sick dog.",
+      "sentence_sv": "Hälsokontrollen kommer att gälla den sjuka hunden.",
+      "target": "concern",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "ekorre",
+      "en": "squirrel",
+      "sentence_en": "The fluffy squirrel eats nuts in the tree.",
+      "sentence_sv": "Den fluffiga ekorren äter nötter i trädet.",
+      "target": "squirrel",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "ankel",
+      "en": "ankle",
+      "sentence_en": "The little monkey hurt his ankle.",
+      "sentence_sv": "Den lilla apan gjorde illa sin ankel.",
+      "target": "ankle",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "handled",
+      "en": "wrist",
+      "sentence_en": "The vet put a bandage on my wrist.",
+      "sentence_sv": "Veterinären satte ett bandage på min handled.",
+      "target": "wrist",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fallskärm",
+      "en": "parachute",
+      "sentence_en": "The brave bird has a tiny red parachute.",
+      "sentence_sv": "Den modiga fågeln har en liten röd fallskärm.",
+      "target": "parachute",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "tillåta",
+      "en": "allow",
+      "sentence_en": "We allow the cat to sit inside.",
+      "sentence_sv": "Vi tillåter katten att sitta inomhus.",
+      "target": "allow",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "delfin",
+      "en": "dolphin",
+      "sentence_en": "A friendly dolphin jumps high in the blue sea.",
+      "sentence_sv": "En vänlig delfin hoppar högt i det blå havet.",
+      "target": "dolphin",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "tonfisk",
+      "en": "tuna",
+      "sentence_en": "The big shark wants to eat fresh tuna.",
+      "sentence_sv": "Den stora hajen vill äta färsk tonfisk.",
+      "target": "tuna",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "bläckfisk",
+      "en": "squid",
+      "sentence_en": "A fast squid swims away in the water.",
+      "sentence_sv": "En snabb bläckfisk simmar iväg i vattnet.",
+      "target": "squid",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fly",
+      "en": "escape",
+      "sentence_en": "The rabbit tries to escape from the pen.",
+      "sentence_sv": "Kaninen försöker fly från hagen.",
+      "target": "escape",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "skjuta upp",
+      "en": "launch",
+      "sentence_en": "We launch a toy rocket into the sky.",
+      "sentence_sv": "Vi skjuter upp en leksaksraket upp i skyn.",
+      "target": "launch",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "fenor",
+      "en": "fins",
+      "sentence_en": "The colorful fish have shiny blue fins.",
+      "sentence_sv": "De färggranna fiskarna har glänsande blå fenor.",
+      "target": "fins",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "pingvin",
+      "en": "penguin",
+      "sentence_en": "A cute penguin stands on the cold ice.",
+      "sentence_sv": "En söt pingvin står på den kalla isen.",
+      "target": "penguin",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "överleva",
+      "en": "survive",
+      "sentence_en": "Animals need water and food to survive.",
+      "sentence_sv": "Djur behöver vatten och mat för att överleva.",
+      "target": "survive",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "lyckligtvis",
+      "en": "luckily",
+      "sentence_en": "Luckily, the lost kitten came back home.",
+      "sentence_sv": "Lyckligtvis kom den borttappade kattungen tillbaka hem.",
+      "target": "luckily",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "sällan",
+      "en": "rarely",
+      "sentence_en": "The sleepy owl rarely flies in the day.",
+      "sentence_sv": "Den sömniga ugglan flyger sällan på dagen.",
+      "target": "rarely",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "vagga",
+      "en": "waddle",
+      "sentence_en": "The funny ducks waddle down to the lake.",
+      "sentence_sv": "De roliga ankorna vaggar ner till sjön.",
+      "target": "waddle",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    },
+    {
+      "sv": "strålande",
+      "en": "brilliantly",
+      "sentence_en": "The bright sun shines brilliantly today.",
+      "sentence_sv": "Den starka solen sken strålande idag.",
+      "target": "brilliantly",
+      "theme": "Ett spännande djurcenter nära havet med en veterinärmottagning",
+      "theme_auto": true,
+      "locked": false
+    }
+  ]
+}
